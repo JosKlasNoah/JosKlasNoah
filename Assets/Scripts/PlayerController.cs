@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using System;
 
 public interface IInteractable
 {
@@ -9,65 +7,112 @@ public interface IInteractable
     void UpdateObjectOffset(float newPosistion);
 }
 
-[RequireComponent(typeof(Rigidbody))]
+//this object needs a rigidbody and capsule collider to make sure it has it We make unity require it
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class PlayerController : MonoBehaviour
 {
+    //lenght of the raycast from player feet
     const float groundDistanceAllowed = .1f;
 
+    [Header("Movement")]
     [SerializeField]
-    float _moveSpeed = 20, _jumpHeight = 15000;
-    [SerializeField]
-    int _maxJumpCount =1;
+    float _moveSpeed = 5;
+    [SerializeField, Range(0, 1)]
+    float _sprintSpeed = .2f;
+    [SerializeField, Range(0, 1)]
+    float _crouchSpeed = .8f;
 
+    [SerializeField, Header("Jumping")]
+    float _jumpHeight = 2000;
+    [SerializeField]
+    int _maxJumpCount = 1;
+    [SerializeField]
+    float _jumpDelay = 0f;
+
+    [SerializeField, Header("Height")]
+    float _normalHeight = 2.2f;
+    [SerializeField]
+    float _crouchHeight = 1.5f;
+
+    [SerializeField, Header("ObjectInteraction")]
+    float _objectInteractionDistance = 2.2f;
+    IInteractable holdingObject;
+    IInteractable hitObjectInterface; // object we are currently overlapping with
+
+    [SerializeField, Header("Debug")]
+    bool DebugRays = false;
+    Vector3 _moveInput = new Vector3();
+
+
+    //component references
+    [SerializeField, HideInInspector]
     Camera _cam;
+    [SerializeField, HideInInspector]
     Rigidbody _rb;
+    [SerializeField, HideInInspector]
+    CapsuleCollider _capsuleCollider;
 
-    [SerializeField]
-    Vector3 _moveInput;
+    //MousePosistionData
+    float mouseLookRotation = 0;
+    float mouseLookUp = 0;
 
-    float mouseLookRotation;
-    float mouseLookUp;
-    int _currentJumpCount =0;
-    float _jumpDelay;
+    //JumpData
+    bool _jumpKeyPressed = false;
+    int _currentJumpCount = 0;
+    float _currentJumpDelay = 0;
 
-    private void OnValidate()
+    bool _shouldStopCrouching = true;
+
+    #region Editor
+    private void Reset()
     {
+        //set default rigidbody settings
         _rb = GetComponent<Rigidbody>();
-        // _rb.isKinematic = true;
+        _rb.useGravity = false;
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
+        _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        _rb.mass = 10;
 
+        //set capsule settings
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+        _capsuleCollider.material.staticFriction = 0;
+        _capsuleCollider.material.dynamicFriction = 0;
+        _capsuleCollider.material.frictionCombine = PhysicMaterialCombine.Minimum;
+
+        // get camera
+        _cam = GetComponentInChildren<Camera>();
+        //if the object has no child with a camera
+        if (_cam == null)
+        {
+            //create new gameobject set his parrent and his localposistion
+            GameObject camObj = new GameObject("MainCamera");
+            camObj.transform.SetParent(transform);
+
+            //add the components
+            _cam = camObj.AddComponent<Camera>();
+            camObj.AddComponent<AudioListener>();
+        }
+        ChangeHeight(_normalHeight);
+
+        _cam.gameObject.tag = "MainCamera";
     }
+    #endregion
 
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
-        _cam = GetComponentInChildren<Camera>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
-
-    Vector3 oldmove;
 
     private void Update()
     {
-        DrawJumpRay();
-
         #region Movement
-       // Vector3 currentVelocity = _rb.velocity;
-
-        _moveInput = transform.right * Input.GetAxisRaw("Horizontal") + transform.forward * Input.GetAxisRaw("Vertical");
-        _moveInput = Vector3.Normalize(_moveInput)* Time.deltaTime * _moveSpeed;
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Jump"))
         {
-            Jump();
+            _jumpKeyPressed = true;
         }
 
-        _rb.AddForce(_moveInput - _rb.velocity);
-
-        if (oldmove.magnitude - _rb.velocity.magnitude < .1f)
-        {
-            oldmove = _rb.velocity;
-            //print(_rb.velocity);
-        }
-
+        _moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
+        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed() * Time.deltaTime;
         #endregion
 
         #region LookAround
@@ -76,49 +121,211 @@ public class PlayerController : MonoBehaviour
         mouseLookRotation = Input.GetAxis("Mouse X") * 1;
         //float mouseLookUp will be set equal to its old value + the current Y axis of the mouse multiplied by the sensitivity. the result wil be between -80 and 80
         mouseLookUp = Mathf.Clamp(mouseLookUp - (Input.GetAxis("Mouse Y") * 1), -80, 80);
+        #endregion
+
+        if (Input.GetButtonDown("Crouch"))
+        {
+            ChangeHeight(_crouchHeight);
+            _shouldStopCrouching = false;
+        }
+
+        if (IsCrouching())
+        {
+            if (Input.GetButtonUp("Crouch"))
+            {
+                if (CanStopCrouching())
+                {
+                    ChangeHeight(_normalHeight);
+                }
+
+                _shouldStopCrouching = true;
+            }
+            else if (_shouldStopCrouching)
+            {
+                if (CanStopCrouching())
+                {
+                    ChangeHeight(_normalHeight);
+                }
+            }
+        }
+
+        OnObjectInteraction();
+
+    }
+
+    private void FixedUpdate()
+    {
+
+        #region Movement
+        if (_jumpKeyPressed)
+        {
+            _jumpKeyPressed = false;
+            Jump();
+            Debug.Log("jump key detected");
+        }
+
+        float currentMinMax = MinMaxMoveSpeed();
+
+        _moveInput = new Vector3(
+            Mathf.Clamp(_moveInput.x, -currentMinMax, currentMinMax), //x
+           _rb.velocity.y, //y
+            Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
+            );
+
+        _rb.velocity = _moveInput + (Physics.gravity * Time.fixedDeltaTime);
+        #endregion
 
         _rb.MoveRotation(Quaternion.Euler(0, mouseLookRotation, 0) * _rb.rotation);
         _cam.gameObject.transform.localRotation = Quaternion.Euler(mouseLookUp, 0, 0);
-
-        #endregion
     }
 
+    #region Movement
     void Jump()
     {
+        if (DebugRays)
+        {
+            DrawJumpRay();
+        }
+
+        //als we op de grond zijn
         if (IsGrounded())
         {
             _currentJumpCount = 0;
-            print("test");
         }
-
-        if (Time.time < _jumpDelay && _currentJumpCount > _maxJumpCount)
+        //als we niet op de grond zijn , als we niet nog een keer mogen springen
+        else if (_currentJumpCount >= _maxJumpCount || Time.time < _jumpDelay)
         {
-            
             return;
         }
-        else
-        Debug.Log((Time.time < _jumpDelay) +":"+ (_currentJumpCount <= _maxJumpCount));
 
+        if (_rb.velocity.y < 0)
+        {
+            _rb.velocity += Vector3.down * _rb.velocity.y;
+            Debug.Log(_rb.velocity);
+        }
 
-        _rb.AddForce(Vector3.up * _jumpHeight * Time.deltaTime);
-        _jumpDelay = Time.time +.5f;
+        _rb.AddForce(Vector3.up * _jumpHeight);
+        _currentJumpDelay = Time.time + _jumpDelay;
         _currentJumpCount++;
     }
 
     void DrawJumpRay()
     {
-        Vector3 rayStartPos = transform.position - Vector3.up * (GetComponent<CapsuleCollider>().bounds.extents.y);
+        Bounds CapsuleBounds = GetComponent<CapsuleCollider>().bounds;
+        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .95f);
         Debug.DrawRay(rayStartPos, Vector3.down * groundDistanceAllowed, Color.red, 10);
+
+        Debug.DrawRay(rayStartPos + (transform.forward * CapsuleBounds.extents.z), Vector3.down * groundDistanceAllowed, Color.red, 10);
+        Debug.DrawRay(rayStartPos + (transform.forward * -CapsuleBounds.extents.z), Vector3.down * groundDistanceAllowed, Color.red, 10);
+        Debug.DrawRay(rayStartPos + (transform.right * CapsuleBounds.extents.x), Vector3.down * groundDistanceAllowed, Color.red, 10);
+        Debug.DrawRay(rayStartPos + (transform.right * -CapsuleBounds.extents.x), Vector3.down * groundDistanceAllowed, Color.red, 10);
     }
 
     bool IsGrounded()
     {
-        Vector3 rayStartPos = transform.position - Vector3.up * (GetComponent<CapsuleCollider>().bounds.extents.y);
 
-        return Physics.Raycast(rayStartPos, Vector3.down, groundDistanceAllowed);
+        Bounds CapsuleBounds = _capsuleCollider.bounds;
+        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .95f);
+
+        return Physics.Raycast(rayStartPos, Vector3.down, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.forward * CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.right * CapsuleBounds.extents.x) + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.right * -CapsuleBounds.extents.x), Vector3.down, groundDistanceAllowed);
+    }
+    bool CanStopCrouching()
+    {
+        return !Physics.Raycast(transform.position + Vector3.up * (_capsuleCollider.bounds.extents.y * .95f), Vector3.up, _normalHeight - _crouchHeight);
     }
 
+    float MinMaxMoveSpeed()
+    {
+        return _moveSpeed * (IsCrouching() ? 100 * _crouchSpeed : 100 * (Input.GetButton("Sprint") ? 1 + _sprintSpeed : 1));
+    }
 
+    void ChangeHeight(float newHeight)
+    {
+        float difference = (_capsuleCollider.height - newHeight) * .5f * 2;
+        _capsuleCollider.height = newHeight;
+        _cam.transform.localPosition = Vector3.up * _capsuleCollider.height * .41f;
+        _rb.AddForce(Vector3.down * difference, ForceMode.VelocityChange);
+    }
+
+    bool IsCrouching()
+    {
+        return _capsuleCollider.height == _crouchHeight;
+    }
+
+    #endregion
+    void OnObjectInteraction()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (holdingObject != null)
+            {
+                holdingObject.OnItemInteract(this);
+            }
+            else
+            {
+                RayCheck();
+                if (hitObjectInterface != null)
+                {
+                    hitObjectInterface.OnItemInteract(this);
+                }
+                else
+                {
+                    Debug.Log("test");
+                }
+            }
+
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            if (holdingObject != null)
+            {
+                holdingObject.OnItemRightMouseButton(this);
+            }
+        }
+    }
+
+    void RayCheck()
+    {
+        //visible line in editor
+        Debug.DrawRay(_cam.gameObject.transform.position, _cam.gameObject.transform.forward * 2f, Color.green, 5);
+
+        //create a new raycasthit
+        RaycastHit hit = new RaycastHit();
+
+        //shoot a ray forward , and only check the layers specified in the editor
+        //IF we hit something
+        if (Physics.Raycast(_cam.gameObject.transform.position, _cam.gameObject.transform.forward, out hit, _objectInteractionDistance))
+        {
+            //If the hit object has a rigidbody
+            if (hit.rigidbody != null)
+            {
+                //hitobject is equal to the IInteractable from the hit object (if it has any),other wise its null 
+                hitObjectInterface = hit.rigidbody.gameObject.GetComponent<IInteractable>();
+            }
+            else if (holdingObject != null)
+            {
+                holdingObject.UpdateObjectOffset(hit.distance);
+            }
+            else
+            {
+                hitObjectInterface = null;
+            }
+        }
+        //IF we did not hit something with the ray
+        else
+        {
+            //clear the hitobject
+            hitObjectInterface = null;
+            if (holdingObject != null)
+            {
+                holdingObject.UpdateObjectOffset(1500);
+            }
+        }
+    }
 
 }
 /*

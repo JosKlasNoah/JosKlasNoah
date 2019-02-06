@@ -5,8 +5,6 @@ using UnityEditor;
 
 public class EditorCustomGameObjectMenu
 {
-
-
     [MenuItem("GameObject/Custom", false, 1), MenuItem("GameObject/Custom/Player", false, 0)]
     static void CreatePlayerObject(MenuCommand menuCommand)
     {
