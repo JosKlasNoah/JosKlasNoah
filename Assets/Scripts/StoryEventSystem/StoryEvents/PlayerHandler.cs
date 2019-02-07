@@ -8,9 +8,8 @@ public class PlayerHandler : MonoBehaviour
 
     public void SetJumpCount(int count)
     {
-        GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().JumpCount = count;
+      //  GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>()max;
     }
-
 
     public void DisablePlayer()
     {
