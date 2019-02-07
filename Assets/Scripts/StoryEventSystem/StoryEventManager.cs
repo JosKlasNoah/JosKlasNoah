@@ -29,6 +29,7 @@ namespace Custom.StoryEventManager
         public static void OnAudioFinished()
         {
             instance._storyEventQue.Dequeue().PlayOnStoryPlay();
+            PlayNext();
         }
 
         static void PlayNext()
