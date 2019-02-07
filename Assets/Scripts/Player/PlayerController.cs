@@ -63,6 +63,8 @@ public class PlayerController : MonoBehaviour
 
     bool _shouldStopCrouching = true;
 
+    public int JumpCount { get { return _currentJumpCount; } set { _currentJumpCount = value; } }
+
     #region Editor
     private void Reset()
     {
