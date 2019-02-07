@@ -10,7 +10,7 @@ enum TriggerType
 }
 
 [System.Serializable]
-class StoryContainer
+public class StoryContainer
 {
     public StoryEvent_SO storyEventToExecute;
     public UnityEvent OnStoryEventTriggerExecute = new UnityEvent();

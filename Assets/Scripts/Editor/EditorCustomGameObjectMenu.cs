@@ -19,12 +19,25 @@ public class EditorCustomGameObjectMenu
         Selection.activeObject = go;
     }
 
-    [MenuItem("GameObject/Custom/GameEvent", false, 0)]
+    [MenuItem("GameObject/Custom/GameTriggerEvent", false, 5)]
     static void CreateGameEventTriggerObject(MenuCommand menuCommand)
     {
         // Create a custom game object
         GameObject go = new GameObject("GameEventTrigger");
         go.AddComponent<StoryEventTrigger>();
+        // Ensure it gets reparented if this was a context click (otherwise does nothing)
+        GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+        // Register the creation in the undo system
+        Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+        Selection.activeObject = go;
+    }
+
+    [MenuItem("GameObject/Custom/GameOnAwakeEvent", false, 6)]
+    static void CreateGameOnAwakeObject(MenuCommand menuCommand)
+    {
+        // Create a custom game object
+        GameObject go = new GameObject("GameEventOnAwake");
+        go.AddComponent<StoryEventOnAwake>();
         // Ensure it gets reparented if this was a context click (otherwise does nothing)
         GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
         // Register the creation in the undo system
