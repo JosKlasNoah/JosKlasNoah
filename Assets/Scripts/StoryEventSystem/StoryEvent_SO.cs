@@ -28,11 +28,11 @@ public class StoryEvent_SO : ScriptableObject
 
         GameManager.PlayAudio(_audioToPlay);
 
-        _onStoryPlay.Invoke();
+        //_onStoryPlay.Invoke();
     }
 
     public void PlayOnStoryPlay()
     {
-        //_onStoryPlay.Invoke();
+        _onStoryPlay.Invoke();
     }
 }
