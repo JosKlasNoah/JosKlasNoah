@@ -6,6 +6,11 @@ using Custom.GameManager;
 public class PlayerHandler : MonoBehaviour
 {
 
+    public void SetJumpCount(int count)
+    {
+      //  GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>()max;
+    }
+
     public void DisablePlayer()
     {
         GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().enabled = false;
