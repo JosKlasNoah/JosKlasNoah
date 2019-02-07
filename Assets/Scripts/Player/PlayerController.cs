@@ -274,7 +274,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("test");
+
                 }
             }
 

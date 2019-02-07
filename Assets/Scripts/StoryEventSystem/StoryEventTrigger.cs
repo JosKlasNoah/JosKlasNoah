@@ -35,8 +35,10 @@ public class StoryEventTrigger : MonoBehaviour
     [SerializeField]
     TriggerType _storyEventTriggerType;
 
+    [SerializeField]
     List<StoryContainer> _storyChainEvents = new List<StoryContainer>();
-    
+
+    bool Once = false;
 
     BoxCollider _collider;
 
@@ -58,6 +60,11 @@ public class StoryEventTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (Once)
+            return;
+
+        Once = true;
+
         switch (_storyEventTriggerType)
         {
             case TriggerType.Player:

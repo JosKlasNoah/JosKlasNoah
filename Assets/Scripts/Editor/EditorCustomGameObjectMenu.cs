@@ -11,6 +11,7 @@ public class EditorCustomGameObjectMenu
         // Create a custom game object
         GameObject go = new GameObject("Player");
         go.AddComponent<PlayerController>();
+        go.AddComponent<AudioPlayerManager>();
         // Ensure it gets reparented if this was a context click (otherwise does nothing)
         GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
         // Register the creation in the undo system

@@ -23,11 +23,20 @@ namespace Custom.StoryEventManager
             {
                 instance._storyEventQue.Enqueue(pStoryEvent);
             }
+            instance._storyEventQue.Peek().ExecuteStoryEvent();
         }
 
-        public static void OnFinish(StoryEvent_SO storyEvent)
+        public static void OnAudioFinished()
         {
+            instance._storyEventQue.Dequeue().PlayOnStoryPlay();
+        }
 
+        static void PlayNext()
+        {
+            if(instance._storyEventQue.Count != 0)
+            {
+                instance._storyEventQue.Peek().ExecuteStoryEvent();
+            }
         }
     }
 }

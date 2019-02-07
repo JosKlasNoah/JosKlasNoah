@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 namespace Custom.GameManager
 {
     using Custom.StoryEventManager;
@@ -15,7 +14,17 @@ namespace Custom.GameManager
         StoryEventManager StoryManager;
         AudioSource _currentAudioSource;
 
-        public static AudioSource CurrentAudioSource { get { return instance._currentAudioSource; } set { instance._currentAudioSource = value; } }
+        public static AudioSource CurrentAudioSource
+        {
+            get { return instance._currentAudioSource; }
+            set
+            {
+                if (instance == null)
+                    new GameManager();
+
+                instance._currentAudioSource = value;
+            }
+        }
 
         GameManager()
         {
@@ -23,7 +32,6 @@ namespace Custom.GameManager
             {
                 StoryManager = new StoryEventManager();
                 instance = this;
-                Debug.Log("test");
             }
         }
 
@@ -37,7 +45,7 @@ namespace Custom.GameManager
             }
         }
 
-        static void PlayAudio(AudioClip PAudioClip)
+        public static void PlayAudio(AudioClip PAudioClip)
         {
             instance._currentAudioSource.clip = PAudioClip;
             instance._currentAudioSource.Play();
