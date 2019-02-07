@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using Custom.GameManager;
 public interface IInteractable
 {
     void OnItemInteract(PlayerController owningPlayer);
@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        GameManager.CurrentPlayerController = this;
     }
 
     private void Update()

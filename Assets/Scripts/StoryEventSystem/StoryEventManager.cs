@@ -17,7 +17,9 @@ namespace Custom.StoryEventManager
 
         public static void QueStoryEvents(List<StoryEvent_SO> newEvents)
         {
-            instance._storyEventQue.Clear();
+                
+            if (instance._storyEventQue.Count > 0)
+                instance._storyEventQue.Clear();
 
             foreach (StoryEvent_SO pStoryEvent in newEvents)
             {
@@ -34,7 +36,7 @@ namespace Custom.StoryEventManager
 
         static void PlayNext()
         {
-            if(instance._storyEventQue.Count != 0)
+            if (instance._storyEventQue.Count != 0)
             {
                 instance._storyEventQue.Peek().ExecuteStoryEvent();
             }

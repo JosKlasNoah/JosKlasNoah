@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Custom.GameManager;
+using Custom.StoryEventManager;
 
 [CreateAssetMenu(fileName = "StoryEvent", menuName = "Custom")]
 public class StoryEvent_SO : ScriptableObject
@@ -18,6 +19,13 @@ public class StoryEvent_SO : ScriptableObject
 
     public void ExecuteStoryEvent()
     {
+        if(_audioToPlay == null)
+        {
+            Debug.LogWarning("NoAudioSourceFound");
+            StoryEventManager.OnAudioFinished();
+            return;
+        }
+
         GameManager.PlayAudio(_audioToPlay);
     }
 

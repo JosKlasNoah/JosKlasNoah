@@ -20,7 +20,7 @@ public class StoryEventOnAwake : MonoBehaviour
 
     }
 
-    private void Awake()
+    private void Start()
     {
         StoryEventManager.QueStoryEvents(StoryContainer.GetStorysToExecute(_storyChainEvents));
     }
