@@ -62,7 +62,7 @@ public class StoryEventTrigger : MonoBehaviour
         {
             case TriggerType.Player:
                 if (other.gameObject.GetComponent<PlayerController>() != null)
-                    StoryEventManager.ExecuteStoryEvent(StoryContainer.GetStorysToExecute(_storyChainEvents));
+                    StoryEventManager.QueStoryEvents(StoryContainer.GetStorysToExecute(_storyChainEvents));
                 break;
             default:
                 Debug.LogError(_storyEventTriggerType + " has not been a story event trigger thats implemented");
