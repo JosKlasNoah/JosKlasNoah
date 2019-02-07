@@ -13,6 +13,19 @@ namespace Custom.GameManager
 
         StoryEventManager StoryManager;
         AudioSource _currentAudioSource;
+        PlayerController _player;
+
+        public static PlayerController CurrentPlayerController
+        {
+            get { return instance._player; }
+            set
+            {
+                if (instance == null)
+                    new GameManager();
+
+                instance._player = value;
+            }
+        }
 
         public static AudioSource CurrentAudioSource
         {
