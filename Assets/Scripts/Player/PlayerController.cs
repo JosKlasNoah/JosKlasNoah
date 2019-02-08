@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Header("ObjectInteraction")]
     float _objectInteractionDistance = 2.2f;
-    IInteractable holdingObject;
-    IInteractable hitObjectInterface; // object we are currently overlapping with
+    IInteractable holdingObject = null;
+    IInteractable hitObjectInterface = null; // object we are currently overlapping with
 
     [SerializeField, Header("Debug")]
     bool DebugRays = false;

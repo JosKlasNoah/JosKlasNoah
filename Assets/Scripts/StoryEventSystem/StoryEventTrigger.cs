@@ -33,7 +33,7 @@ public class StoryEventTrigger : MonoBehaviour
 {
    
     [SerializeField]
-    TriggerType _storyEventTriggerType;
+    TriggerType _storyEventTriggerType = TriggerType.Player;
 
     [SerializeField]
     List<StoryContainer> _storyChainEvents = new List<StoryContainer>();
@@ -44,6 +44,7 @@ public class StoryEventTrigger : MonoBehaviour
 
     private void OnValidate()
     {
+        Debug.Log("validating");
         if (_collider == null)
         {
             _collider = GetComponent<BoxCollider>();

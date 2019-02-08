@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RepeatableEvents : MonoBehaviour
 {
-    [SerializeField]Vector3 where;
+    [SerializeField]Vector3 where = new Vector3();
 
     public void Remove(GameObject removeWhat)
     {

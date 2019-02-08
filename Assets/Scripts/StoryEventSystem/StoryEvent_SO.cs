@@ -8,6 +8,7 @@ using Custom.StoryEventManager;
 [CreateAssetMenu(fileName = "StoryEvent", menuName = "Custom")]
 public class StoryEvent_SO : ScriptableObject
 {
+    [SerializeField,HideInInspector]
     UnityEvent _onStoryPlay = new UnityEvent();
     [SerializeField]
     AudioClip _audioToPlay;
