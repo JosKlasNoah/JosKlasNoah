@@ -63,7 +63,8 @@ public class PlayerController : MonoBehaviour
 
     bool _shouldStopCrouching = true;
 
-    public int JumpCount { get { return _currentJumpCount; } set { _currentJumpCount = value; } }
+    public int JumpCount { get { return _maxJumpCount; } set { _maxJumpCount = value; } }
+    public Camera Cam { get { return _cam; } set { _cam = value; } }
 
     #region Editor
     private void Reset()
@@ -97,6 +98,7 @@ public class PlayerController : MonoBehaviour
         ChangeHeight(_normalHeight);
 
         _cam.gameObject.tag = "MainCamera";
+        _cam.backgroundColor = Color.black;
     }
     #endregion
 

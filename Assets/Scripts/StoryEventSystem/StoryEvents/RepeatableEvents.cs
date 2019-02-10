@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RepeatableEvents : MonoBehaviour
 {
-    [SerializeField]Vector3 where = new Vector3();
+    [SerializeField] Vector3 where = new Vector3();
 
     public void Remove(GameObject removeWhat)
     {
@@ -19,5 +17,10 @@ public class RepeatableEvents : MonoBehaviour
     public void MoveSomething(GameObject what)
     {
         what.transform.position = where;
+    }
+
+    public void End()
+    {
+        Application.Quit();
     }
 }

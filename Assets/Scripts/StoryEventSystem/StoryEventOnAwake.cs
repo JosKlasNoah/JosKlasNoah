@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Custom.StoryEventManager;
+using Custom.Story;
 using UnityEngine.Events;
 
 public class StoryEventOnAwake : MonoBehaviour
@@ -10,6 +10,7 @@ public class StoryEventOnAwake : MonoBehaviour
     [SerializeField]
     List<StoryContainer> _storyChainEvents = new List<StoryContainer>();
 
+    /*
     private void OnValidate()
     {
         for (int i = 0; i < _storyChainEvents.Count; i++)
@@ -29,8 +30,10 @@ public class StoryEventOnAwake : MonoBehaviour
         }
     }
 
+    */
+
     private void Start()
     {
-        StoryEventManager.QueStoryEvents(StoryContainer.GetStorysToExecute(_storyChainEvents));
+        StoryEventManager.QueStoryEvents(_storyChainEvents);
     }
 }

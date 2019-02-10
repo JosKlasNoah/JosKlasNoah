@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Custom.GameManager
 {
-    using Custom.StoryEventManager;
+    using Custom.Story;
 
     public class GameManager
     {
