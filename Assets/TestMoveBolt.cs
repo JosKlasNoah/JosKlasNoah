@@ -8,7 +8,7 @@ public class TestMoveBolt : MonoBehaviour
     private float _range = 2;
 
     [SerializeField]
-    private float _rate = 0.25f;
+    private float _rate = 0.6f;
 
     private Vector3 _startPosition;
 
