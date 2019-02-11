@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField]
-    float _moveSpeed = 5;
+    float _moveSpeed = 2;
     [SerializeField, Range(0, 1)]
     float _sprintSpeed = .2f;
     [SerializeField, Range(0, 1)]
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
-        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed() * Time.deltaTime;
+        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed();
         #endregion
 
         #region LookAround
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
             Mathf.Clamp(_moveInput.x, -currentMinMax, currentMinMax), //x
            _rb.velocity.y, //y
             Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
-            );
+            ) * Time.fixedDeltaTime;
 
         _rb.velocity = _moveInput + (!_isOnGround ? (Physics.gravity * Time.fixedDeltaTime) : _currentGroundVelocity);
 

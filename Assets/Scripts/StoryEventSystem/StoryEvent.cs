@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 [DisallowMultipleComponent()]
 public class StoryEvent : MonoBehaviour
@@ -10,23 +9,21 @@ public class StoryEvent : MonoBehaviour
     [SerializeField]
     List<StoryEventContainer> _storyEvents = new List<StoryEventContainer>();
 
-    [SerializeField]
-    [HideInInspector]
-    TriggerType _storyEventTriggerType = TriggerType.Trigger;
-
-    [SerializeField]
-    [HideInInspector]
-    List<StoryContainer> _storyChainEvents = new List<StoryContainer>();
-
     BoxCollider _collider;
 
     private void OnValidate()
     {
+
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
             {
                 storyEventContainer._eventName = "Default Name";
+            }
+
+            if (0 >= storyEventContainer._maxInteractionCount)
+            {
+                storyEventContainer._maxInteractionCount++;
             }
         }
 
@@ -66,6 +63,11 @@ public class StoryEvent : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        StoryEventManager.GetAllExectionMethods();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
@@ -87,10 +89,10 @@ public class StoryEvent : MonoBehaviour
                 continue;
             }
 
-            if (other.gameObject.GetComponent(PstoryEvent._interactionType) != null)
+            if (other.gameObject.GetComponent(StoryEventManager.GetTypeAsString(PstoryEvent._interactionType)) != null)
             {
-
-                StoryEventManager.QueStoryEvents(_storyChainEvents);
+                ///TODO REIMPLEMENT EVERYTHING
+           //     StoryEventManager.QueStoryEvents(_storyEvents);
             }
         }
 

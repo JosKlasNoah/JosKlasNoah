@@ -7,18 +7,14 @@ public class Temp : MonoBehaviour
     Rigidbody rb;
 
     [SerializeField]
-    float speed;
+    float speed = 0;
 
-    [SerializeField]
-    Transform targetpos;
-    Vector3 CurrentPos;
     // Start is called before the first frame update
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.isKinematic = false;
-        CurrentPos = transform.position;
     }
 
 

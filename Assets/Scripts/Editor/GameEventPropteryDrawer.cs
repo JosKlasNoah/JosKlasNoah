@@ -12,6 +12,11 @@ public class GameEventPropteryDrawer : PropertyDrawer
             {TriggerType.Trigger,80 }
         };
 
+    string[] options = System.Enum.GetNames(typeof(TriggerType));
+
+    Vector2 CalculativeRect;
+    Rect GuiRect;
+
     public override bool CanCacheInspectorGUI(SerializedProperty property)
     {
         return base.CanCacheInspectorGUI(property);
@@ -36,10 +41,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         return height;
     }
 
-    string[] options = System.Enum.GetNames(typeof(TriggerType));
-    Vector2 CalculativeRect;
-    Rect GuiRect;
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         GuiRect = position;
@@ -48,7 +49,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
 
         EditorGUI.LabelField(CalculateRect(position.width, 0, true), "", GUI.skin.horizontalSlider);
-        CalculateRect(0, 5, 0, 0);
 
         EditorGUI.PrefixLabel(CalculateRect(70, 0), new GUIContent("EventName:"));
         EditorGUI.PropertyField(CalculateRect(150, 10), property.FindPropertyRelative("_eventName"), GUIContent.none);
@@ -77,8 +77,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
 
         NextLine(20);
-        EditorGUI.LabelField(CalculateRect(140, 35), new GUIContent("RequiredEventCount:"));
-        property.FindPropertyRelative("_eventRequiredmentList").arraySize = EditorGUI.IntField(CalculateRect(50, 0), property.FindPropertyRelative("_eventRequiredmentList").arraySize);
+        EditorGUI.PrefixLabel(CalculateRect(140, 30), new GUIContent("RequiredEventCount:"),GUIStyle.none);
+        property.FindPropertyRelative("_eventRequiredmentList").arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(30, 10), property.FindPropertyRelative("_eventRequiredmentList").arraySize), 0, 5);
         SerializedProperty tempProp = property.FindPropertyRelative("_eventRequiredmentList");
 
         if (tempProp.arraySize > 0)
@@ -99,8 +99,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
         }
         NextLine(40);
 
-        EditorGUI.LabelField(CalculateRect(140, 35), new GUIContent("StoryEventAmount:"));
-        property.FindPropertyRelative("StoryEventsToPlay").arraySize = EditorGUI.IntField(CalculateRect(50, 0), property.FindPropertyRelative("StoryEventsToPlay").arraySize);
+        EditorGUI.PrefixLabel(CalculateRect(150, 20), new GUIContent("StoryEventAmount:"), GUIStyle.none);
+        property.FindPropertyRelative("StoryEventsToPlay").arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(50, 0), property.FindPropertyRelative("StoryEventsToPlay").arraySize), 0, 50);
 
 
         tempProp = property.FindPropertyRelative("StoryEventsToPlay");
@@ -108,15 +108,14 @@ public class GameEventPropteryDrawer : PropertyDrawer
         {
             NextLine(25);
             EditorGUI.PropertyField(CalculateRect(150, 50), tempProp.GetArrayElementAtIndex(i).FindPropertyRelative("_audioToPlay"), GUIContent.none, true);
-           
-        }
 
-        NextLine(30);
-        //EditorGUI.PropertyField(CalculateRect(position.width,250,0,0), property.FindPropertyRelative("StoryEventsToPlay"),true);
+
+        }
 
 
         EditorGUI.EndProperty();
     }
+
 
     void DisplayAwakePropertys(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -129,8 +128,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
         EditorGUI.PrefixLabel(CalculateRect(80, 15), new GUIContent("TriggerType:"));
 
         List<string> temp = StoryEventManager.GetTriggerTypes();
-        string _oldString = property.FindPropertyRelative("_interactionType").stringValue;
-        property.FindPropertyRelative("_interactionType").stringValue = temp[EditorGUI.Popup(CalculateRect(150, 0), temp.IndexOf(_oldString), temp.ToArray())];
+        byte _oldStringIndex = (byte) property.FindPropertyRelative("_interactionType").intValue;
+        property.FindPropertyRelative("_interactionType").intValue = EditorGUI.Popup(CalculateRect(150, 0), _oldStringIndex, temp.ToArray());
 
         NextLine(35);
 
@@ -143,8 +142,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         EditorGUI.PrefixLabel(CalculateRect(30, 50), new GUIContent("Max:"));
         EditorGUI.PropertyField(CalculateRect(50, 10), property.FindPropertyRelative("_maxInteractionCount"), GUIContent.none);
 
-        //EditorGUI.PropertyField(CalculateRect(100, 0), property.FindPropertyRelative("_storyEventTriggerType"), GUIContent.none);
-
     }
 
     void DisplayAllPropertys(Rect position, SerializedProperty property, GUIContent label)
@@ -155,14 +152,14 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     TriggerType GetPropertyAsTriggerType(SerializedProperty property)
     {
-        return (TriggerType)System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
+        return (TriggerType) System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
     }
 
     Rect CalculateRect(float Pwidth, float Pheight, float PspaceWidth, float PspaceHeight, bool pIgnoreHeightChange = false)
     {
         if (CalculativeRect.x + PspaceWidth + Pwidth > GuiRect.width)
         {
-           // CalculativeRect.x = GuiRect.x;
+            // CalculativeRect.x = GuiRect.x;
             //CalculativeRect.y += 20;
         }
 
@@ -173,13 +170,12 @@ public class GameEventPropteryDrawer : PropertyDrawer
         return TempRect;
     }
 
-
     Rect CalculateRect(float Pwidth, float PspaceWidth, bool pIgnoreHeightChange = false)
     {
         if (CalculativeRect.x + PspaceWidth + Pwidth > GuiRect.width && !pIgnoreHeightChange)
         {
-           // CalculativeRect.x = GuiRect.x - 5;
-           // CalculativeRect.y += 20;
+            // CalculativeRect.x = GuiRect.x - 5;
+            // CalculativeRect.y += 20;
         }
 
         Rect TempRect = new Rect(CalculativeRect.x + PspaceWidth, CalculativeRect.y, Pwidth, 20);
@@ -188,8 +184,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
         return TempRect;
     }
-
-
 
     Rect NextLine(float Pheight)
     {

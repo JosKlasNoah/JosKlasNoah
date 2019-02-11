@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using System;
+using System.Reflection;
 
 namespace Custom.Story
 {
@@ -13,30 +14,30 @@ namespace Custom.Story
         Trigger
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StoryEventNameContainer
     {
         public string _eventName = "DefaultEventName";
         public bool _Completed = false;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StoryEventContainer
     {
         [SerializeField]
         public string _eventName = "DefaultEventName";
         public TriggerType _storyEventTriggerType = TriggerType.Awake;
-        public int _interactionCountBeforePlay = 1; // hoe vaak de trigger moet worden geactiaved om deze story event te triggeren
-        public int _maxInteractionCount = 1; // hoe vaak deze getriggerd kan worden
-        public int _currentInteractionCount = 0;
-        public string _interactionType;
+        public byte _interactionCountBeforePlay = 1; // hoe vaak de trigger moet worden geactiaved om deze story event te triggeren
+        public byte _maxInteractionCount = 1; // hoe vaak deze getriggerd kan worden
+        public byte _currentInteractionCount = 0;
+        public byte _interactionType;
 
         public List<StoryEventNameContainer> _eventRequiredmentList = new List<StoryEventNameContainer>();
 
         public List<StoryContainer> StoryEventsToPlay = new List<StoryContainer>();
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StoryContainer
     {
         public AudioClip _audioToPlay;
@@ -60,10 +61,18 @@ namespace Custom.Story
         }
     }
 
+    [Serializable]
+    public class StoryDelegate
+    {
+
+
+
+    }
 
     public class StoryEventManager
     {
         static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(TestObjectInteraction) };
+        static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler) };
         static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
 
         static StoryEventManager instance;
@@ -105,9 +114,37 @@ namespace Custom.Story
             return temp;
         }
 
-        public static Type GetTypeFromString(int index)
+        public static string GetTypeAsString(int index)
         {
-            return _triggerTypes[index];
+            return _triggerTypes[index].Name;
+        }
+
+        public static List<string> GetAllExectionMethods()
+        {
+            List<string> temp = new List<string>();
+
+            for (int i = 0; i < _EventExecutionMehtods.Count; i++)
+            {
+                Type currentType = _EventExecutionMehtods[i];
+
+                foreach (var item in currentType.GetMethods(BindingFlags.Static |BindingFlags.Public))
+                {
+                    string tempa = "";
+                    foreach (var itemm in item.GetParameters())
+                    {
+                        tempa += itemm + ",";
+                    }
+                    item.Invoke()
+
+                    Debug.Log(item + " : " + tempa);
+                }
+                
+
+            }
+
+         //   Debug.Log("returned with nothing");
+
+            return temp;
         }
 
         public static void QueStoryEvents(List<StoryContainer> newEvents)
