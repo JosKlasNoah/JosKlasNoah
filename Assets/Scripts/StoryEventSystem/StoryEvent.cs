@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent()]
 public class StoryEvent : MonoBehaviour
@@ -11,7 +12,7 @@ public class StoryEvent : MonoBehaviour
 
     [SerializeField]
     [HideInInspector]
-    TriggerType _storyEventTriggerType = TriggerType.Player;
+    TriggerType _storyEventTriggerType = TriggerType.Trigger;
 
     [SerializeField]
     [HideInInspector]
@@ -86,21 +87,13 @@ public class StoryEvent : MonoBehaviour
                 continue;
             }
 
-
-            switch (_storyEventTriggerType)
+            if (other.gameObject.GetComponent(PstoryEvent._interactionType) != null)
             {
-                case TriggerType.Player:
-                    if (other.gameObject.GetComponent<PlayerController>() != null)
-                    {
-                        StoryEventManager.QueStoryEvents(_storyChainEvents);
-                    }
 
-                    break;
-                default:
-                    Debug.LogError(_storyEventTriggerType + " has not been a story event trigger thats implemented");
-                    break;
+                StoryEventManager.QueStoryEvents(_storyChainEvents);
             }
-
         }
+
     }
 }
+

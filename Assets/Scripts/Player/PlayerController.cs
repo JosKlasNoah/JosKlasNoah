@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using Custom.GameManager;
 public interface IInteractable
 {
@@ -12,7 +13,7 @@ public interface IInteractable
 public class PlayerController : MonoBehaviour
 {
     //lenght of the raycast from player feet
-    const float groundDistanceAllowed = .1f;
+    const float groundDistanceAllowed = .5f;
 
     [Header("Movement")]
     [SerializeField]
@@ -41,7 +42,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, Header("Debug")]
     bool DebugRays = false;
+
+
     Vector3 _moveInput = new Vector3();
+    bool _isOnGround;
+    Vector3 _currentGroundVelocity;
+    List<RaycastHit> _latestRayHits = new List<RaycastHit>();
 
 
     //component references
@@ -74,7 +80,7 @@ public class PlayerController : MonoBehaviour
         _rb.useGravity = false;
         _rb.constraints = RigidbodyConstraints.FreezeRotation;
         _rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-        _rb.mass = 10;
+        _rb.mass = 1;
 
         //set capsule settings
         _capsuleCollider = GetComponent<CapsuleCollider>();
@@ -111,6 +117,11 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         #region Movement
+
+        _isOnGround = IsGrounded();
+        DrawJumpRay();
+        _currentGroundVelocity = GetGroundMovingSpeed();
+
         if (Input.GetButtonDown("Jump"))
         {
             _jumpKeyPressed = true;
@@ -165,7 +176,7 @@ public class PlayerController : MonoBehaviour
         if (_jumpKeyPressed)
         {
             _jumpKeyPressed = false;
-            Jump();
+            Jump(_isOnGround);
             Debug.Log("jump key detected");
         }
 
@@ -177,7 +188,8 @@ public class PlayerController : MonoBehaviour
             Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
             );
 
-        _rb.velocity = _moveInput + (Physics.gravity * Time.fixedDeltaTime);
+        _rb.velocity = _moveInput + (!_isOnGround ? (Physics.gravity * Time.fixedDeltaTime) : _currentGroundVelocity);
+
         #endregion
 
         _rb.MoveRotation(Quaternion.Euler(0, mouseLookRotation, 0) * _rb.rotation);
@@ -185,7 +197,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Movement
-    void Jump()
+    void Jump(bool Grounded)
     {
         if (DebugRays)
         {
@@ -193,7 +205,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //als we op de grond zijn
-        if (IsGrounded())
+        if (Grounded)
         {
             _currentJumpCount = 0;
         }
@@ -214,10 +226,26 @@ public class PlayerController : MonoBehaviour
         _currentJumpCount++;
     }
 
+    Vector3 GetGroundMovingSpeed()
+    {
+        for (int i = 0; i < _latestRayHits.Count; i++)
+        {
+            if (_latestRayHits[i].rigidbody == null)
+            {
+                continue;
+            }
+
+            return _latestRayHits[i].rigidbody.velocity;
+        }
+
+        return Vector3.zero;
+
+    }
+
     void DrawJumpRay()
     {
         Bounds CapsuleBounds = GetComponent<CapsuleCollider>().bounds;
-        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .95f);
+        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .80f);
         Debug.DrawRay(rayStartPos, Vector3.down * groundDistanceAllowed, Color.red, 10);
 
         Debug.DrawRay(rayStartPos + (transform.forward * CapsuleBounds.extents.z), Vector3.down * groundDistanceAllowed, Color.red, 10);
@@ -228,15 +256,25 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-
         Bounds CapsuleBounds = _capsuleCollider.bounds;
-        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .95f);
+        Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .80f);
 
-        return Physics.Raycast(rayStartPos, Vector3.down, groundDistanceAllowed)
-            || Physics.Raycast(rayStartPos + (transform.forward * CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
-            || Physics.Raycast(rayStartPos + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
-            || Physics.Raycast(rayStartPos + (transform.right * CapsuleBounds.extents.x) + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, groundDistanceAllowed)
-            || Physics.Raycast(rayStartPos + (transform.right * -CapsuleBounds.extents.x), Vector3.down, groundDistanceAllowed);
+        RaycastHit Ray1 = new RaycastHit();
+        RaycastHit Ray2 = new RaycastHit();
+        RaycastHit Ray3 = new RaycastHit();
+        RaycastHit Ray4 = new RaycastHit();
+        RaycastHit Ray5 = new RaycastHit();
+
+
+        bool temp = Physics.Raycast(rayStartPos, Vector3.down, out Ray1, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.forward * CapsuleBounds.extents.z), Vector3.down, out Ray2, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, out Ray3, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.right * CapsuleBounds.extents.x) + (transform.forward * -CapsuleBounds.extents.z), Vector3.down, out Ray4, groundDistanceAllowed)
+            || Physics.Raycast(rayStartPos + (transform.right * -CapsuleBounds.extents.x), Vector3.down, out Ray5, groundDistanceAllowed);
+
+        _latestRayHits = new List<RaycastHit>() { Ray1, Ray2, Ray3, Ray4, Ray5 };
+
+        return temp;
     }
     bool CanStopCrouching()
     {
