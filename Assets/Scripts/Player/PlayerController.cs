@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log(_rb.velocity);
         }
 
-        _rb.AddForce(Vector3.up * _jumpHeight);
+        _rb.AddForce(Vector3.up * _jumpHeight, ForceMode.Impulse);
         _currentJumpDelay = Time.time + _jumpDelay;
         _currentJumpCount++;
     }
