@@ -127,22 +127,22 @@ namespace Custom.Story
             {
                 Type currentType = _EventExecutionMehtods[i];
 
-                foreach (var item in currentType.GetMethods(BindingFlags.Static |BindingFlags.Public))
+                foreach (var item in currentType.GetMethods(BindingFlags.Static | BindingFlags.Public))
                 {
                     string tempa = "";
                     foreach (var itemm in item.GetParameters())
                     {
-                        tempa += itemm + ",";
-                    }
-                    item.Invoke()
+                        object nigga = itemm.DefaultValue;
 
-                    Debug.Log(item + " : " + tempa);
+                        Debug.Log(itemm.Name + ":" + Type.GetType(itemm.ParameterType.ToString()));
+                        //tempa += itemm + ",";
+                    }
+
+                    //  Debug.Log(item + " : " + tempa);
                 }
-                
+
 
             }
-
-         //   Debug.Log("returned with nothing");
 
             return temp;
         }

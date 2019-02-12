@@ -119,7 +119,6 @@ public class PlayerController : MonoBehaviour
         #region Movement
 
         _isOnGround = IsGrounded();
-        DrawJumpRay();
         _currentGroundVelocity = GetGroundMovingSpeed();
 
         if (Input.GetButtonDown("Jump"))
@@ -173,22 +172,18 @@ public class PlayerController : MonoBehaviour
     {
 
         #region Movement
-        if (_jumpKeyPressed)
-        {
-            _jumpKeyPressed = false;
-            Jump(_isOnGround);
-            Debug.Log("jump key detected");
-        }
 
         float currentMinMax = MinMaxMoveSpeed();
 
+        Debug.Log(_rb.velocity.y);
+
         _moveInput = new Vector3(
             Mathf.Clamp(_moveInput.x, -currentMinMax, currentMinMax), //x
-           _rb.velocity.y, //y
+           _rb.velocity.y + Jump(_isOnGround), //y
             Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
             ) * Time.fixedDeltaTime;
 
-        _rb.velocity = _moveInput + (!_isOnGround ? (Physics.gravity * Time.fixedDeltaTime) : _currentGroundVelocity);
+        _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity* Time.fixedDeltaTime);
 
         #endregion
 
@@ -197,12 +192,16 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Movement
-    void Jump(bool Grounded)
+    float Jump(bool Grounded)
     {
-        if (DebugRays)
+        if (_jumpKeyPressed)
         {
-            DrawJumpRay();
+            _jumpKeyPressed = false;
+
+            Debug.Log("jump key detected");
         }
+        else
+            return 0;
 
         //als we op de grond zijn
         if (Grounded)
@@ -212,18 +211,23 @@ public class PlayerController : MonoBehaviour
         //als we niet op de grond zijn , als we niet nog een keer mogen springen
         else if (_currentJumpCount >= _maxJumpCount || Time.time < _jumpDelay)
         {
-            return;
+            return 0;
         }
 
+
+        //not sure what this does
         if (_rb.velocity.y < 0)
         {
-            _rb.velocity += Vector3.down * _rb.velocity.y;
-            Debug.Log(_rb.velocity);
+            //    _rb.velocity += Vector3.down * _rb.velocity.y;
+            //   Debug.Log(_rb.velocity);
         }
 
-        _rb.AddForce(Vector3.up * _jumpHeight);
+        return _jumpHeight;
+        /*
+        _rb.AddForce(Vector3.up * _jumpHeight,ForceMode.Acceleration);
         _currentJumpDelay = Time.time + _jumpDelay;
         _currentJumpCount++;
+    */
     }
 
     Vector3 GetGroundMovingSpeed()
@@ -256,6 +260,11 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
+        if (DebugRays)
+        {
+            DrawJumpRay();
+        }
+
         Bounds CapsuleBounds = _capsuleCollider.bounds;
         Vector3 rayStartPos = transform.position - Vector3.up * (CapsuleBounds.extents.y * .80f);
 
