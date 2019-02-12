@@ -45,9 +45,69 @@ public class GameEventPropteryDrawer : PropertyDrawer
     {
         GuiRect = position;
         CalculativeRect = new Vector2(position.x, position.y);
-
         EditorGUI.BeginProperty(position, label, property);
 
+
+
+        List<System.Reflection.MethodInfo> atemp = StoryDelegate.GetAllMethods();
+
+        List<string> ctemp = StoryDelegate.MethodsToString(atemp);
+
+
+        SerializedProperty tempBase = property.FindPropertyRelative("_storyDel");
+        EditorGUI.LabelField(CalculateRect(150, 0), tempBase.FindPropertyRelative("_functionName").stringValue);
+
+        NextLine(25);
+
+        List<string> btemp = new List<string>() { "a/b", "g", "a/c" };
+
+        //ClassName DropDownMenu
+        int _menuIndex = EditorGUI.Popup(CalculateRect(150, 0), 2, btemp.ToArray());
+
+      //  tempBase.FindPropertyRelative("_className").stringValue = StoryEventManager.GetEventExecutionMethodsAsString()[_menuIndex];
+
+
+        int _oldStringIndex = ctemp.IndexOf(tempBase.FindPropertyRelative("_functionName").stringValue);
+        _oldStringIndex = (_oldStringIndex) < 0 ? 0 : _oldStringIndex;
+
+        int _newStringIndex = EditorGUI.Popup(CalculateRect(150, 0), _oldStringIndex, ctemp.ToArray());
+
+        if (_newStringIndex != _oldStringIndex)
+        {
+            System.Reflection.MethodInfo foundMethod = atemp[_newStringIndex];
+
+            tempBase.FindPropertyRelative("_functionName").stringValue = foundMethod.Name;
+
+            tempBase = tempBase.FindPropertyRelative("_functionParameters");
+            tempBase.ClearArray();
+
+            System.Type[] parameterTypes = StoryDelegate.GetMethodParameterTypes(foundMethod);
+
+            for (int i = 0; i < parameterTypes.Length; i++)
+            {
+                NextLine(25);
+                tempBase.InsertArrayElementAtIndex(i);
+                SerializedProperty currentElement = tempBase.GetArrayElementAtIndex(i);
+                SetTypeObjectWrapperValue(currentElement, parameterTypes[i]);
+            }
+        }
+        else
+        {
+            tempBase = tempBase.FindPropertyRelative("_functionParameters");
+
+            for (int i = 0; i < tempBase.arraySize; i++)
+            {
+                NextLine(25);
+                SerializedProperty currentElement = tempBase.GetArrayElementAtIndex(i);
+                DrawPropertyForCustomType(CalculateRect(200, 0), currentElement);
+            }
+        }
+
+
+
+        #region temp hidden
+        /*
+        NextLine(30);
         EditorGUI.LabelField(CalculateRect(position.width, 0, true), "", GUI.skin.horizontalSlider);
 
         EditorGUI.PrefixLabel(CalculateRect(70, 0), new GUIContent("EventName:"));
@@ -112,10 +172,103 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
         }
 
-
+    */
+        #endregion
         EditorGUI.EndProperty();
     }
 
+
+    void DrawPropertyForCustomType(Rect trans, SerializedProperty objectWrapper)
+    {
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+
+        switch (vt)
+        {
+            case TypeObjectWrapper.valueType.Int:
+                objectWrapper.FindPropertyRelative("_int").intValue = EditorGUI.IntField(trans, objectWrapper.FindPropertyRelative("_int").intValue);
+                break;
+            case TypeObjectWrapper.valueType.Float:
+                objectWrapper.FindPropertyRelative("_float").floatValue = EditorGUI.FloatField(trans, objectWrapper.FindPropertyRelative("_float").floatValue);
+                break;
+            case TypeObjectWrapper.valueType.Bool:
+                objectWrapper.FindPropertyRelative("_bool").boolValue = EditorGUI.Toggle(trans, objectWrapper.FindPropertyRelative("_bool").boolValue);
+                break;
+            case TypeObjectWrapper.valueType.UnityObject:
+                objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue = EditorGUI.ObjectField(trans, (GameObject) objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue, typeof(GameObject), true);
+                break;
+            default:
+                Debug.LogWarning("shit aint implemented yet");
+                return;
+        }
+    }
+
+    object GetPropertyValueForCustomType(SerializedProperty objectWrapper)
+    {
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+        switch (vt)
+        {
+            case TypeObjectWrapper.valueType.Int:
+                return objectWrapper.FindPropertyRelative("_int").intValue;
+
+            case TypeObjectWrapper.valueType.Float:
+                return objectWrapper.FindPropertyRelative("_float").floatValue;
+
+            case TypeObjectWrapper.valueType.Bool:
+                return objectWrapper.FindPropertyRelative("_bool").boolValue;
+
+            case TypeObjectWrapper.valueType.UnityObject:
+                return objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue;
+
+            default:
+                Debug.LogWarning("shit aint implemented yet");
+                return null;
+        }
+    }
+
+    void SetTypeObjectWrapperValue(SerializedProperty objectWrapper, System.Type pValueType)
+    {
+        TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(pValueType);
+        switch (vt)
+        {
+            case TypeObjectWrapper.valueType.Int:
+                objectWrapper.FindPropertyRelative("_int").intValue = 0;
+
+                break;
+            case TypeObjectWrapper.valueType.Float:
+                objectWrapper.FindPropertyRelative("_float").floatValue = 0f;
+
+                break;
+            case TypeObjectWrapper.valueType.Bool:
+                objectWrapper.FindPropertyRelative("_bool").boolValue = false;
+
+                break;
+            case TypeObjectWrapper.valueType.UnityObject:
+                objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue = null;
+                break;
+            default:
+                Debug.LogWarning("shit aint implemented yet");
+                break;
+        }
+
+        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int) vt;
+    }
+
+    object GetDefaultValueForType(TypeObjectWrapper.valueType vt)
+    {
+        switch (vt)
+        {
+            case TypeObjectWrapper.valueType.Int:
+                return 0;
+            case TypeObjectWrapper.valueType.Float:
+                return 0f;
+            case TypeObjectWrapper.valueType.Bool:
+                return false;
+            case TypeObjectWrapper.valueType.UnityObject:
+                return null;
+            default:
+                return null;
+        }
+    }
 
     void DisplayAwakePropertys(Rect position, SerializedProperty property, GUIContent label)
     {

@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         #region Movement
 
         _isOnGround = IsGrounded();
-       // _currentGroundVelocity = GetGroundMovingSpeed();
+        // _currentGroundVelocity = GetGroundMovingSpeed();
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -133,9 +133,9 @@ public class PlayerController : MonoBehaviour
         #region LookAround
 
         //float mouseLookRotation will be set equal to the x value of the mousemovement multiplied by the sensitivity divined in the gameManager
-        mouseLookRotation = Input.GetAxis("Mouse X") * 1;
+        mouseLookRotation = Input.GetAxis("Mouse X") * GameManager.MouseVelocity;
         //float mouseLookUp will be set equal to its old value + the current Y axis of the mouse multiplied by the sensitivity. the result wil be between -80 and 80
-        mouseLookUp = Mathf.Clamp(mouseLookUp - (Input.GetAxis("Mouse Y") * 1), -80, 80);
+        mouseLookUp = Mathf.Clamp(mouseLookUp - (Input.GetAxis("Mouse Y") * GameManager.MouseVelocity), -80, 80);
         #endregion
 
         if (Input.GetButtonDown("Crouch"))
@@ -220,7 +220,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log(_rb.velocity);
         }
 
-        _rb.AddForce(Vector3.up * _jumpHeight);
+        _rb.AddForce(Vector3.up * _jumpHeight, ForceMode.Impulse);
         _currentJumpDelay = Time.time + _jumpDelay;
         _currentJumpCount++;
     }

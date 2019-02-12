@@ -1,25 +1,23 @@
 ﻿using UnityEngine;
 
-public class RepeatableEvents : MonoBehaviour
+public class RepeatableEvents
 {
-    [SerializeField] Vector3 where = new Vector3();
-
-    public void Remove(GameObject removeWhat)
+    public static void Remove(GameObject removeWhat)
     {
         removeWhat.SetActive(false);
     }
 
-    public void Activate(GameObject activateWhat)
+    public static void Activate(GameObject activateWhat)
     {
         activateWhat.SetActive(true);
     }
 
-    public void MoveSomething(GameObject what)
+    public static void MoveSomething(GameObject what, Vector3 where)
     {
         what.transform.position = where;
     }
 
-    public void End()
+    public static void End()
     {
         Application.Quit();
     }

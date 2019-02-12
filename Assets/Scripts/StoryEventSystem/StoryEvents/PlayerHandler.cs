@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Custom.GameManager;
 using UnityEngine;
-using Custom.GameManager;
 
 public class PlayerHandler
 {
-
     public static void SetJumpCount(int count)
     {
         GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().JumpCount = count;

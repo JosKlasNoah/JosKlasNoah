@@ -2,18 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [DisallowMultipleComponent()]
 public class StoryEvent : MonoBehaviour
 {
     [SerializeField]
-    List<StoryEventContainer> _storyEvents = new List<StoryEventContainer>();
+    public List<StoryEventContainer> _storyEvents = new List<StoryEventContainer>();
 
     BoxCollider _collider;
 
+
+    #region Editor
     private void OnValidate()
     {
-
+      
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -62,10 +65,18 @@ public class StoryEvent : MonoBehaviour
             DestroyImmediate(GetComponent<BoxCollider>());
         }
     }
+    #endregion;
+
+    [ContextMenu("test")]
+    public void Test()
+    {
+        _storyEvents[0]._storyDel.Invoke();
+    }
 
     private void Awake()
     {
-        StoryEventManager.GetAllExectionMethods();
+        Cursor.lockState = CursorLockMode.None;
+        Test();
     }
 
     private void OnTriggerEnter(Collider other)
