@@ -13,7 +13,7 @@ public interface IInteractable
 public class PlayerController : MonoBehaviour
 {
     //lenght of the raycast from player feet
-    const float groundDistanceAllowed = .5f;
+    const float groundDistanceAllowed = .3f;
 
     [Header("Movement")]
     [SerializeField]
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     float _crouchSpeed = .8f;
 
     [SerializeField, Header("Jumping")]
-    float _jumpHeight = 2000;
+    float _jumpHeight = 200;
     [SerializeField]
     int _maxJumpCount = 1;
     [SerializeField]
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
-        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed();
+        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed() * Time.deltaTime;
         #endregion
 
         #region LookAround
@@ -172,18 +172,22 @@ public class PlayerController : MonoBehaviour
     {
 
         #region Movement
+        if (_jumpKeyPressed)
+        {
+            _jumpKeyPressed = false;
+            Jump();
+            Debug.Log("jump key detected");
+        }
 
         float currentMinMax = MinMaxMoveSpeed();
 
-        Debug.Log(_rb.velocity.y);
-
         _moveInput = new Vector3(
             Mathf.Clamp(_moveInput.x, -currentMinMax, currentMinMax), //x
-           _rb.velocity.y + Jump(_isOnGround), //y
+           _rb.velocity.y, //y
             Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
-            ) * Time.fixedDeltaTime;
+            );
 
-        _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity* Time.fixedDeltaTime);
+        _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity * Time.fixedDeltaTime);
 
         #endregion
 
@@ -192,42 +196,33 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Movement
-    float Jump(bool Grounded)
+    void Jump()
     {
-        if (_jumpKeyPressed)
+        if (DebugRays)
         {
-            _jumpKeyPressed = false;
-
-            Debug.Log("jump key detected");
+            DrawJumpRay();
         }
-        else
-            return 0;
 
         //als we op de grond zijn
-        if (Grounded)
+        if (IsGrounded())
         {
             _currentJumpCount = 0;
         }
         //als we niet op de grond zijn , als we niet nog een keer mogen springen
         else if (_currentJumpCount >= _maxJumpCount || Time.time < _jumpDelay)
         {
-            return 0;
+            return;
         }
 
-
-        //not sure what this does
         if (_rb.velocity.y < 0)
         {
-            //    _rb.velocity += Vector3.down * _rb.velocity.y;
-            //   Debug.Log(_rb.velocity);
+            _rb.velocity += Vector3.down * _rb.velocity.y;
+            Debug.Log(_rb.velocity);
         }
 
-        return _jumpHeight;
-        /*
-        _rb.AddForce(Vector3.up * _jumpHeight,ForceMode.Acceleration);
+        _rb.AddForce(Vector3.up * _jumpHeight);
         _currentJumpDelay = Time.time + _jumpDelay;
         _currentJumpCount++;
-    */
     }
 
     Vector3 GetGroundMovingSpeed()
