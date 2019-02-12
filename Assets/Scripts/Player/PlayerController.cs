@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         #region Movement
 
         _isOnGround = IsGrounded();
-        _currentGroundVelocity = GetGroundMovingSpeed();
+       // _currentGroundVelocity = GetGroundMovingSpeed();
 
         if (Input.GetButtonDown("Jump"))
         {

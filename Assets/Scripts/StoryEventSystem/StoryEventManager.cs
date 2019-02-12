@@ -132,9 +132,11 @@ namespace Custom.Story
                     string tempa = "";
                     foreach (var itemm in item.GetParameters())
                     {
-                        object nigga = itemm.DefaultValue;
 
-                        Debug.Log(itemm.Name + ":" + Type.GetType(itemm.ParameterType.ToString()));
+                       // itemm.ParameterType.
+                      //  object nigga = Activator.CreateInstance(Type.GetType(itemm.ParameterType.Name),0);
+
+                        Debug.Log(itemm. + ":" );
                         //tempa += itemm + ",";
                     }
 

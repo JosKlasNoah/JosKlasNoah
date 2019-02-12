@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Temp : MonoBehaviour
 {
     Rigidbody rb;
@@ -17,11 +18,10 @@ public class Temp : MonoBehaviour
         rb.isKinematic = false;
     }
 
-
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        rb.velocity = Vector3.forward * speed;
+        rb.velocity = Vector3.up * speed;
 
     }
 }
