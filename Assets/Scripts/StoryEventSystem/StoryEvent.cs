@@ -16,7 +16,7 @@ public class StoryEvent : MonoBehaviour
     #region Editor
     private void OnValidate()
     {
-      
+
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -67,44 +67,22 @@ public class StoryEvent : MonoBehaviour
     }
     #endregion;
 
-    [ContextMenu("test")]
-    public void Test()
-    {
-        _storyEvents[0]._storyDel.Invoke();
-    }
 
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Test();
+        foreach (StoryEventContainer PstoryEvent in _storyEvents)
+        {
+            if (PstoryEvent.CanExecuteStoryEvent())
+                StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
-            if (!StoryEventManager.RequiresCollider(PstoryEvent))
-            {
-                continue;
-            }
-
-            if (PstoryEvent._currentInteractionCount >= PstoryEvent._maxInteractionCount)
-            {
-                continue;
-            }
-
-            PstoryEvent._currentInteractionCount++;
-
-            if (PstoryEvent._interactionCountBeforePlay >= PstoryEvent._currentInteractionCount)
-            {
-                continue;
-            }
-
-            if (other.gameObject.GetComponent(StoryEventManager.GetTypeAsString(PstoryEvent._interactionType)) != null)
-            {
-                ///TODO REIMPLEMENT EVERYTHING
-           //     StoryEventManager.QueStoryEvents(_storyEvents);
-            }
+            if (PstoryEvent.CanExecuteStoryEvent(other))
+                StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
         }
 
     }
