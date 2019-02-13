@@ -1,0 +1,207 @@
+fileFormatVersion: 2
+guid: 915425d90dd59f6489cb2c64927d08b9
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16
+    100004: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15
+    100006: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12
+    100008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11
+    100010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19
+    100012: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8
+    100014: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10
+    100016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18
+    100018: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7
+    100020: pasted__pasted__pCube4_pasted__group3_group4
+    100022: pasted__pasted__pCube4_pasted__group3_group9
+    100024: pasted__pasted__pCube4_pasted__group5_group6
+    100026: pasted__pasted__polySurface1_pasted__group_group2
+    100028: pasted__pCube4_group3
+    100030: pasted__pCube4_group5
+    100032: pasted__polySurface1_group
+    100034: pasted__polySurface1_group1
+    100036: pCube4
+    100038: polySurface1
+    400000: //RootNode
+    400002: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16
+    400004: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15
+    400006: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12
+    400008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11
+    400010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19
+    400012: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8
+    400014: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10
+    400016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18
+    400018: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7
+    400020: pasted__pasted__pCube4_pasted__group3_group4
+    400022: pasted__pasted__pCube4_pasted__group3_group9
+    400024: pasted__pasted__pCube4_pasted__group5_group6
+    400026: pasted__pasted__polySurface1_pasted__group_group2
+    400028: pasted__pCube4_group3
+    400030: pasted__pCube4_group5
+    400032: pasted__polySurface1_group
+    400034: pasted__polySurface1_group1
+    400036: pCube4
+    400038: polySurface1
+    2100000: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16Mat
+    2100002: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15Mat
+    2100004: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12Mat
+    2100006: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11Mat
+    2100008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19Mat
+    2100010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8Mat
+    2100012: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10Mat
+    2100014: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18Mat
+    2100016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7Mat
+    2100018: pasted__pasted__pCube4_pasted__group3_group4Mat
+    2100020: pasted__pasted__pCube4_pasted__group3_group9Mat
+    2100022: pasted__pasted__pCube4_pasted__group5_group6Mat
+    2100024: pasted__pasted__polySurface1_pasted__group_group2Mat
+    2100026: pasted__pCube4_group3Mat
+    2100028: pasted__pCube4_group5Mat
+    2100030: pasted__polySurface1_groupMat
+    2100032: pasted__polySurface1_group1Mat
+    2100034: pCube4Mat
+    2100036: polySurface1Mat
+    2300000: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16
+    2300002: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15
+    2300004: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12
+    2300006: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11
+    2300008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19
+    2300010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8
+    2300012: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10
+    2300014: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18
+    2300016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7
+    2300018: pasted__pasted__pCube4_pasted__group3_group4
+    2300020: pasted__pasted__pCube4_pasted__group3_group9
+    2300022: pasted__pasted__pCube4_pasted__group5_group6
+    2300024: pasted__pasted__polySurface1_pasted__group_group2
+    2300026: pasted__pCube4_group3
+    2300028: pasted__pCube4_group5
+    2300030: pasted__polySurface1_group
+    2300032: pasted__polySurface1_group1
+    2300034: pCube4
+    2300036: polySurface1
+    3300000: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16
+    3300002: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15
+    3300004: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12
+    3300006: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11
+    3300008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19
+    3300010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8
+    3300012: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10
+    3300014: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18
+    3300016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7
+    3300018: pasted__pasted__pCube4_pasted__group3_group4
+    3300020: pasted__pasted__pCube4_pasted__group3_group9
+    3300022: pasted__pasted__pCube4_pasted__group5_group6
+    3300024: pasted__pasted__polySurface1_pasted__group_group2
+    3300026: pasted__pCube4_group3
+    3300028: pasted__pCube4_group5
+    3300030: pasted__polySurface1_group
+    3300032: pasted__polySurface1_group1
+    3300034: pCube4
+    3300036: polySurface1
+    4300000: pasted__pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__pasted__group10_pasted__pasted__pasted__group11_pasted__pasted__group12_pasted__group15_group16
+    4300002: pasted__pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__pasted__group4_pasted__pasted__pasted__group10_pasted__pasted__group11_pasted__group12_group15
+    4300004: pasted__pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__pasted__group3_pasted__pasted__pasted__group4_pasted__pasted__group10_pasted__group11_group12
+    4300006: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group3_pasted__pasted__group4_pasted__group10_group11
+    4300008: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group17_pasted__group18_group19
+    4300010: pasted__pasted__pasted__pasted__pCube4_pasted__pasted__pasted__group5_pasted__pasted__group6_pasted__group7_group8
+    4300012: pasted__pasted__pasted__pCube4_pasted__pasted__group3_pasted__group4_group10
+    4300014: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group17_group18
+    4300016: pasted__pasted__pasted__pCube4_pasted__pasted__group5_pasted__group6_group7
+    4300018: pasted__pasted__pCube4_pasted__group3_group4
+    4300020: pasted__pasted__pCube4_pasted__group3_group9
+    4300022: pasted__pasted__pCube4_pasted__group5_group6
+    4300024: pasted__pasted__polySurface1_pasted__group_group2
+    4300026: pasted__pCube4_group3
+    4300028: pasted__pCube4_group5
+    4300030: pasted__polySurface1_group
+    4300032: pasted__polySurface1_group1
+    4300034: pCube4
+    4300036: polySurface1
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
