@@ -8,8 +8,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
 {
     Dictionary<TriggerType, float> TriggerTypeHeight = new Dictionary<TriggerType, float>()
         {
-            {TriggerType.Awake,50 },
-            {TriggerType.Trigger,80 }
+            {TriggerType.Awake,30 },
+            {TriggerType.Trigger,170 }
         };
 
     string[] options = System.Enum.GetNames(typeof(TriggerType));
@@ -17,14 +17,9 @@ public class GameEventPropteryDrawer : PropertyDrawer
     Vector2 CalculativeRect;
     Rect GuiRect;
 
-    public override bool CanCacheInspectorGUI(SerializedProperty property)
-    {
-        return base.CanCacheInspectorGUI(property);
-    }
-
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float height = 500;
+        float height = 70;
 
         TriggerType _tt = GetPropertyAsTriggerType(property.FindPropertyRelative("_storyEventTriggerType"));
         if (TriggerTypeHeight.ContainsKey(_tt))
@@ -33,7 +28,18 @@ public class GameEventPropteryDrawer : PropertyDrawer
         }
         else
         {
+            Debug.LogWarning("Unkown TriggerType:" + _tt + "'");
             height += 500;
+        }
+
+        if (_tt == TriggerType.Trigger)
+        {
+            int size = property.FindPropertyRelative("_eventRequiredmentList").arraySize;
+            height += (size <= 0 ? 0 : 1) * 25 + 25 * size;
+
+            size = property.FindPropertyRelative("_storyEventsToPlay").arraySize;
+            height += size * 20 * property.FindPropertyRelative("_storyEventsToPlay").FindPropertyRelative("_onStoryEventTriggerExecute").arraySize;
+
         }
 
         height += property.FindPropertyRelative("_storyEventsToPlay").arraySize * 25;
@@ -47,9 +53,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         CalculativeRect = new Vector2(position.x, position.y);
         EditorGUI.BeginProperty(position, label, property);
 
-        //  DrawFunctionItem(property);
-
-        NextLine(30);
         EditorGUI.LabelField(CalculateRect(position.width, 0, true), "", GUI.skin.horizontalSlider);
 
         NextLine(25);
@@ -81,7 +84,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
                 break;
         }
 
-        
+
 
         EditorGUI.PrefixLabel(CalculateRect(150, 30), new GUIContent("StoryEventAmount:"), GUIStyle.none);
 
