@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [DisallowMultipleComponent()]
 public class StoryEvent : MonoBehaviour
@@ -73,7 +72,10 @@ public class StoryEvent : MonoBehaviour
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
             if (PstoryEvent.CanExecuteStoryEvent())
+            {
                 StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+
+            }
         }
     }
 
@@ -81,8 +83,12 @@ public class StoryEvent : MonoBehaviour
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
-            if (PstoryEvent.CanExecuteStoryEvent(other))
+
+            if (PstoryEvent.CanExecuteStoryEvent(other.gameObject) && PstoryEvent._storyEventTriggerType == TriggerType.Trigger)
+            {
                 StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+                return;
+            }
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Custom.Story
 {
@@ -30,17 +29,29 @@ namespace Custom.Story
 
         public List<StoryContainer> _storyEventsToPlay = new List<StoryContainer>();
 
-        public bool CanExecuteStoryEvent(Collider other = null)
+        public bool CanExecuteStoryEvent(GameObject obj = null)
         {
             if (_storyEventTriggerType == TriggerType.Awake)
-                return true;
-
-
-            foreach (StoryEventNameContainer _storyName in _eventRequiredmentList)
             {
-                if(_storyName._Completed && StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
+                return true;
+            }
+
+            if (obj == null) return false;
+
+            {
+                bool HasCompletedAll = true;
+                foreach (StoryEventNameContainer _storyName in _eventRequiredmentList)
                 {
-                    return true;
+                    if (!_storyName._Completed && StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
+                    {
+                        HasCompletedAll = false;
+                        break;
+                    }
+                }
+
+                if (!HasCompletedAll)
+                {
+                    return false;
                 }
             }
 
@@ -56,16 +67,14 @@ namespace Custom.Story
                 return false;
             }
 
-            if (other != null)
+            if (obj.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) != null)
             {
-                if (other.gameObject.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) != null)
-                {
-                    return true;
-                }
-
+                return true;
             }
+
             return false;
         }
+
     }
 
     [Serializable]
@@ -314,16 +323,16 @@ namespace Custom.Story
             switch (valueType)
             {
                 case valueType.Int:
-                    _int = (int)pValue;
+                    _int = (int) pValue;
                     break;
                 case valueType.Float:
-                    _float = (float)pValue;
+                    _float = (float) pValue;
                     break;
                 case valueType.Bool:
-                    _bool = (bool)pValue;
+                    _bool = (bool) pValue;
                     break;
                 case valueType.UnityObject:
-                    _unityObject = (UnityEngine.Object)pValue;
+                    _unityObject = (UnityEngine.Object) pValue;
                     break;
                 default:
                     Debug.LogWarning("not implemented type");

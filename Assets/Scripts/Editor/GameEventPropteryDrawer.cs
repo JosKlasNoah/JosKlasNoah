@@ -9,7 +9,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
     Dictionary<TriggerType, float> TriggerTypeHeight = new Dictionary<TriggerType, float>()
         {
             {TriggerType.Awake,30 },
-            {TriggerType.Trigger,170 }
+            {TriggerType.Trigger,180 }
         };
 
     string[] options = System.Enum.GetNames(typeof(TriggerType));
@@ -36,10 +36,19 @@ public class GameEventPropteryDrawer : PropertyDrawer
         {
             int size = property.FindPropertyRelative("_eventRequiredmentList").arraySize;
             height += (size <= 0 ? 0 : 1) * 25 + 25 * size;
+        }
 
-            size = property.FindPropertyRelative("_storyEventsToPlay").arraySize;
-            height += size * 20 * property.FindPropertyRelative("_storyEventsToPlay").FindPropertyRelative("_onStoryEventTriggerExecute").arraySize;
+        for (int i = 0; i < property.FindPropertyRelative("_storyEventsToPlay").arraySize; i++)
+        {
+            height += 15;
+            SerializedProperty tempProp = property.FindPropertyRelative("_storyEventsToPlay").GetArrayElementAtIndex(i).FindPropertyRelative("_onStoryEventTriggerExecute");
 
+            for (int ii = 0; ii < tempProp.arraySize; ii++)
+            {
+                height += 25;
+
+                height += 25 * tempProp.GetArrayElementAtIndex(ii).FindPropertyRelative("_functionParameters").arraySize;
+            }
         }
 
         height += property.FindPropertyRelative("_storyEventsToPlay").arraySize * 25;
@@ -73,9 +82,9 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
             case TriggerType.Trigger:
                 DisplayTriggerPropertys(position, property, label);
-                NextLine(20);
+                NextLine(45);
                 DrawEventInfo(property);
-                NextLine(40);
+                NextLine(45);
                 break;
 
             default:
@@ -86,24 +95,22 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
 
 
-        EditorGUI.PrefixLabel(CalculateRect(150, 30), new GUIContent("StoryEventAmount:"), GUIStyle.none);
+        EditorGUI.PrefixLabel(CalculateRect(115, 100), new GUIContent("StoryEventAmount:"), GUIStyle.none);
 
         SerializedProperty tempProp = property.FindPropertyRelative("_storyEventsToPlay");
         tempProp.arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(30, 0), tempProp.arraySize), 0, 50);
         for (int i = 0; i < tempProp.arraySize; i++)
         {
-            NextLine(25);
-            EditorGUI.PropertyField(CalculateRect(150, 50), tempProp.GetArrayElementAtIndex(i).FindPropertyRelative("_audioToPlay"), GUIContent.none, true);
-            NextLine(20);
+            NextLine(40);
+            EditorGUI.PropertyField(CalculateRect(150, 0), tempProp.GetArrayElementAtIndex(i).FindPropertyRelative("_audioToPlay"), GUIContent.none, true);
 
-            EditorGUI.PrefixLabel(CalculateRect(150, 30), new GUIContent("EventCount:"), GUIStyle.none);
+            EditorGUI.PrefixLabel(CalculateRect(75, 0), new GUIContent("EventCount:"), GUIStyle.none);
             SerializedProperty _storyEvent = tempProp.GetArrayElementAtIndex(i).FindPropertyRelative("_onStoryEventTriggerExecute");
             _storyEvent.arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(30, 0), _storyEvent.arraySize), 0, 50);
 
             for (int y = 0; y < _storyEvent.arraySize; y++)
             {
                 NextLine(25);
-
                 DrawFunctionItem(_storyEvent.GetArrayElementAtIndex(y));
             }
         }
@@ -112,9 +119,9 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     void DrawEventInfo(SerializedProperty property)
     {
-        NextLine(20);
-        EditorGUI.PrefixLabel(CalculateRect(140, 30), new GUIContent("RequiredEventCount:"), GUIStyle.none);
-        property.FindPropertyRelative("_eventRequiredmentList").arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(30, 10), property.FindPropertyRelative("_eventRequiredmentList").arraySize), 0, 5);
+        // NextLine(20);
+        EditorGUI.PrefixLabel(CalculateRect(125, 90), new GUIContent("RequiredEventCount:"), GUIStyle.none);
+        property.FindPropertyRelative("_eventRequiredmentList").arraySize = Mathf.Clamp(EditorGUI.IntField(CalculateRect(30, 0), property.FindPropertyRelative("_eventRequiredmentList").arraySize), 0, 5);
         SerializedProperty tempProp = property.FindPropertyRelative("_eventRequiredmentList");
 
         if (tempProp.arraySize > 0)
@@ -149,7 +156,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
         int _newStringIndex = EditorGUI.Popup(CalculateRect(GuiRect.width, 0), _oldStringIndex, StoryDelegate.MethodsToString(atemp, true).ToArray());
 
-        if (_newStringIndex != _oldStringIndex)
+        if (_newStringIndex != _oldStringIndex || tempBase.FindPropertyRelative("_functionName").stringValue == "")
         {
             System.Reflection.MethodInfo foundMethod = atemp[_newStringIndex];
 
@@ -166,6 +173,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
                 tempBase.InsertArrayElementAtIndex(i);
                 SerializedProperty currentElement = tempBase.GetArrayElementAtIndex(i);
                 SetTypeObjectWrapperValue(currentElement, parameterTypes[i]);
+                DrawPropertyForCustomType(CalculateRect(300, 0), currentElement);
             }
         }
         else
@@ -183,14 +191,14 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     void DrawPropertyForCustomType(Rect trans, SerializedProperty objectWrapper)
     {
-        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType)objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
 
         EditorGUI.PropertyField(trans, objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueString[vt]), GUIContent.none);
     }
 
     object GetPropertyValueForCustomType(SerializedProperty objectWrapper)
     {
-        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType)objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
 
         // objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueObject[vt]);
         switch (vt)
@@ -216,39 +224,11 @@ public class GameEventPropteryDrawer : PropertyDrawer
     void SetTypeObjectWrapperValue(SerializedProperty objectWrapper, System.Type pValueType)
     {
         TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(pValueType);
-        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int)vt;
+        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int) vt;
         //SerializedProperty prop = objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueString[vt]);
 
 
         return;
-        switch (vt)
-        {
-            case TypeObjectWrapper.valueType.Int:
-                //   prop.intValue = 0;
-
-                break;
-            case TypeObjectWrapper.valueType.Float:
-                //  prop.floatValue = 0f;
-
-                break;
-            case TypeObjectWrapper.valueType.Bool:
-                //prop.boolValue = false;
-
-                break;
-            case TypeObjectWrapper.valueType.Vector3:
-                // prop.vector3Value = new Vector3();
-                break;
-
-            case TypeObjectWrapper.valueType.UnityObject:
-                //  prop.objectReferenceValue = null;
-                break;
-
-            default:
-                Debug.LogWarning("shit aint implemented yet : '" + vt + "'");
-                break;
-        }
-
-        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int)vt;
     }
 
     object GetDefaultValueForType(TypeObjectWrapper.valueType vt)
@@ -279,7 +259,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
         EditorGUI.PrefixLabel(CalculateRect(80, 15), new GUIContent("TriggerType:"));
 
         List<string> temp = StoryEventManager.GetTriggerTypes();
-        byte _oldStringIndex = (byte)property.FindPropertyRelative("_interactionType").intValue;
+        byte _oldStringIndex = (byte) property.FindPropertyRelative("_interactionType").intValue;
         property.FindPropertyRelative("_interactionType").intValue = EditorGUI.Popup(CalculateRect(150, 0), _oldStringIndex, temp.ToArray());
 
         NextLine(35);
@@ -302,7 +282,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     TriggerType GetPropertyAsTriggerType(SerializedProperty property)
     {
-        return (TriggerType)System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
+        return (TriggerType) System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
     }
 
     Rect CalculateRect(float Pwidth, float Pheight, float PspaceWidth, float PspaceHeight, bool pIgnoreHeightChange = false)
