@@ -235,7 +235,7 @@ public class PlayerController : MonoBehaviour
                 continue;
             }
 
-            return _latestRayHits[i].rigidbody.velocity;
+            return new Vector3( _latestRayHits[i].rigidbody.velocity.x, 0, _latestRayHits[i].rigidbody.velocity.z );
         }
 
         return Vector3.zero;

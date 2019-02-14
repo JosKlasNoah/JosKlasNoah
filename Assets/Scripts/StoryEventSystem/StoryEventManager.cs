@@ -364,7 +364,7 @@ namespace Custom.Story
 
     public class StoryEventManager
     {
-        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(KeyObject) };
+        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(GrayKey) };
         static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler), typeof(RepeatableEvents) };
         static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
         List<string> _completedStoryEvents = new List<string>();
