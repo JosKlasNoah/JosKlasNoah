@@ -11,7 +11,6 @@ public class PlayerHandler
     public static void DisablePlayer()
     {
         GameManager.CurrentPlayerController.enabled = false;
-        // GameManager.CurrentPlayerController.transform.GetComponentInChildren<Camera>().enabled = false;
     }
 
     public static void EnablePlayer()
