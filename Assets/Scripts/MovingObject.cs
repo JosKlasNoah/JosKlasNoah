@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent( typeof( Rigidbody ) )]
 public class MovingObject : MonoBehaviour
 {
-    [SerializeField, Tooltip("Distance in units the object travels on each axis in world space")]
+    [SerializeField, Tooltip( "Distance in units the object travels on each axis in world space" )]
     private Vector3 _range;
 
     [SerializeField, Tooltip("The speed at which the object travels on each axis in world space")]
-    private Vector3 _speed;
+    private float _speed;
 
     [SerializeField, Tooltip("Time in seconds how far into the movement the object starts")]
-    private Vector3 _timeOffset;
+    private float _timeOffset;
 
-    private Vector3 _startPosition;
-    private Vector3 _targetPosition;
+    private Vector3 _startPosition, _targetPosition;
     private Rigidbody _rb;
 
 
@@ -28,21 +27,19 @@ public class MovingObject : MonoBehaviour
     private void OnValidate()
     {
         _startPosition = transform.position;
-        _targetPosition = transform.position + new Vector3( _speed.x * _range.x, _speed.y * _range.y, _speed.z * _range.z ) * .9f;
+        _targetPosition = _startPosition + _range * 2;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color( 0, 1, 0, 0.5f );
-        Gizmos.DrawSphere( _startPosition, 0.2f );
-        Gizmos.DrawSphere( _targetPosition, 0.2f );
+        Gizmos.color = new Color( 0, 1, 0, 0.15f );
+        Gizmos.DrawSphere( _startPosition, 0.175f );
+        Gizmos.color = new Color( 1, 0, 0, 0.15f );
+        Gizmos.DrawSphere( _targetPosition, 0.175f );
     }
 
     void FixedUpdate()
     {
-        //transform.position = new Vector3( _startPosition.x + Mathf.Sin( ( Time.time + _timeOffset.x ) * _speed.x ) * _range.x, _startPosition.y + Mathf.Sin( ( Time.time + _timeOffset.y ) * _speed.y ) * _range.y, _startPosition.z + Mathf.Sin( ( Time.time + _timeOffset.z ) * _speed.z ) * _range.z );
-        
-        _rb.velocity = new Vector3( Mathf.Sin( ( Time.time + _timeOffset.x ) * _speed.x ) * _range.x, Mathf.Sin( ( Time.time + _timeOffset.y ) * _speed.y ) * _range.y, Mathf.Sin( ( Time.time + _timeOffset.z ) * _speed.z ) * _range.z );
-        Debug.Log( _rb.velocity );
+        _rb.velocity = new Vector3( Mathf.Sin( ( Time.fixedTime + _timeOffset ) * _speed ) * _speed * _range.x, Mathf.Sin( ( Time.fixedTime + _timeOffset ) * _speed ) * _speed * _range.y, Mathf.Sin( ( Time.fixedTime + _timeOffset ) * _speed ) * _speed * _range.z );
     }
 }
