@@ -13,7 +13,7 @@ public interface IInteractable
 public class PlayerController : MonoBehaviour
 {
     //lenght of the raycast from player feet
-    const float groundDistanceAllowed = .3f;
+    const float groundDistanceAllowed = .4f;
 
     [Header("Movement")]
     [SerializeField]
@@ -119,7 +119,8 @@ public class PlayerController : MonoBehaviour
         #region Movement
 
         _isOnGround = IsGrounded();
-        // _currentGroundVelocity = GetGroundMovingSpeed();
+        _currentGroundVelocity = GetGroundMovingSpeed();
+        Debug.Log(_currentGroundVelocity);
 
         if (Input.GetButtonDown("Jump"))
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class MovingObject : MonoBehaviour
 {
     [SerializeField, Tooltip("Distance in units the object travels on each axis in world space")]
@@ -21,10 +22,11 @@ public class MovingObject : MonoBehaviour
     {
         _startPosition = transform.position;
         _rb = GetComponent<Rigidbody>();
+        _rb.isKinematic = true;
     }
 
     void FixedUpdate()
     {
-        transform.position = new Vector3( _startPosition.x + Mathf.Sin( ( Time.time + _timeOffset.x ) * _speed.x ) * _range.x, _startPosition.y + Mathf.Sin( ( Time.time + _timeOffset.y ) * _speed.y ) * _range.y, _startPosition.z + Mathf.Sin( ( Time.time + _timeOffset.z ) * _speed.z ) * _range.z );
+        transform.position = new Vector3(_startPosition.x + Mathf.Sin((Time.time + _timeOffset.x) * _speed.x) * _range.x, _startPosition.y + Mathf.Sin((Time.time + _timeOffset.y) * _speed.y) * _range.y, _startPosition.z + Mathf.Sin((Time.time + _timeOffset.z) * _speed.z) * _range.z);
     }
 }
