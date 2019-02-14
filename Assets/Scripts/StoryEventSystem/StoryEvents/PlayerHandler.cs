@@ -8,6 +8,11 @@ public class PlayerHandler
         GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().JumpCount = count;
     }
 
+    public static void MovePlayer(Vector3 pos)
+    {
+        GameManager.CurrentPlayerController.transform.position = pos;
+    }
+
     public static void DisablePlayer()
     {
         GameManager.CurrentPlayerController.enabled = false;
