@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace Custom.GameManager
 {
@@ -22,7 +22,7 @@ namespace Custom.GameManager
         PlayerController _player;
         SaveDataContainer _saveData = new SaveDataContainer();
 
-        float[] _objecInteractDistance = new float[] { .5f, 1f };
+        float[] _objecInteractDistance = new float[] { 1, 2 };
 
         public static float[] objectInteractDistance => instance._objecInteractDistance;
 
@@ -68,6 +68,11 @@ namespace Custom.GameManager
             if (instance == null)
             {
                 StoryManager = new StoryEventManager();
+                Application.targetFrameRate = -1;
+
+#if UNITY_STANDALONE
+                //  LoadScenes();
+#endif
                 instance = this;
             }
         }
@@ -80,6 +85,16 @@ namespace Custom.GameManager
             {
                 new GameManager();
             }
+        }
+
+
+        void LoadScenes()
+        {
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
+            SceneManager.LoadScene(1, LoadSceneMode.Additive);
+            SceneManager.LoadScene(3, LoadSceneMode.Additive);
+            SceneManager.LoadScene(4, LoadSceneMode.Additive);
+            SceneManager.LoadScene(5, LoadSceneMode.Additive);
         }
 
         public static void PlayAudio(AudioClip PAudioClip)

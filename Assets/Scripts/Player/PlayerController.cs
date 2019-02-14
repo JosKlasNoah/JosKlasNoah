@@ -307,6 +307,8 @@ public class PlayerController : MonoBehaviour
     #endregion
     void OnObjectInteraction()
     {
+        RayCheck();
+
         if (Input.GetMouseButtonDown(0))
         {
             if (holdingObject != null)
@@ -315,15 +317,11 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                RayCheck();
                 if (hitObjectInterface != null)
                 {
                     hitObjectInterface.OnItemInteract(this);
                 }
-                else
-                {
 
-                }
             }
 
         }
