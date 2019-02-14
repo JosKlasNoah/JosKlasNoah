@@ -5,7 +5,13 @@ using UnityEngine;
 
 namespace Custom.GameManager
 {
-    using Custom.StoryEventManager;
+    using Custom.Story;
+
+    [SerializeField]
+    class SaveDataContainer
+    {
+        public float mouseVelocity = 3;
+    }
 
     public class GameManager
     {
@@ -14,10 +20,11 @@ namespace Custom.GameManager
         StoryEventManager StoryManager;
         AudioSource _currentAudioSource;
         PlayerController _player;
+        SaveDataContainer _saveData = new SaveDataContainer();
 
         public static PlayerController CurrentPlayerController
         {
-            get { return instance._player; }
+            get => instance._player;
             set
             {
                 if (instance == null)
@@ -29,7 +36,7 @@ namespace Custom.GameManager
 
         public static AudioSource CurrentAudioSource
         {
-            get { return instance._currentAudioSource; }
+            get => instance._currentAudioSource;
             set
             {
                 if (instance == null)
@@ -37,6 +44,19 @@ namespace Custom.GameManager
 
                 instance._currentAudioSource = value;
             }
+        }
+
+        public static float MouseVelocity
+        {
+            get => instance._saveData.mouseVelocity;
+            set
+            {
+                if (instance == null)
+                    new GameManager();
+
+                instance._saveData.mouseVelocity = value;
+            }
+
         }
 
         GameManager()

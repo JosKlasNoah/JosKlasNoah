@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Custom.StoryEventManager;
+using Custom.Story;
 using Custom.GameManager;
 
 [RequireComponent(typeof(AudioSource))]
@@ -16,7 +16,7 @@ public class AudioPlayerManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         if(_audioSource.clip != null)
@@ -28,7 +28,4 @@ public class AudioPlayerManager : MonoBehaviour
             }
         }
     }
-
-
-
 }

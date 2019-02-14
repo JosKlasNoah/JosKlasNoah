@@ -1,25 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Custom.GameManager;
 using UnityEngine;
-using Custom.GameManager;
 
-public class PlayerHandler : MonoBehaviour
+public class PlayerHandler
 {
-
-    public void SetJumpCount(int count)
+    public static void SetJumpCount(int count)
     {
-      //  GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>()max;
+        GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().JumpCount = count;
     }
 
-    public void DisablePlayer()
+    public static void DisablePlayer()
     {
-        GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().enabled = false;
-        GameManager.CurrentPlayerController.gameObject.transform.GetComponentInChildren<Camera>().enabled = false;
+        GameManager.CurrentPlayerController.enabled = false;
+        // GameManager.CurrentPlayerController.transform.GetComponentInChildren<Camera>().enabled = false;
     }
 
-    public void EnablePlayer()
+    public static void EnablePlayer()
     {
-        GameManager.CurrentPlayerController.gameObject.GetComponent<PlayerController>().enabled = true;
-        GameManager.CurrentPlayerController.gameObject.transform.GetComponentInChildren<Camera>().enabled = true;
+        GameManager.CurrentPlayerController.enabled = true;
+        //GameManager.CurrentPlayerController.transform.GetComponentInChildren<Camera>().enabled = true;
+    }
+
+    public static void EnableCamera(bool pEnable)
+    {
+        GameManager.CurrentPlayerController.Cam.cullingMask = pEnable ? 1 : 0;
     }
 }
