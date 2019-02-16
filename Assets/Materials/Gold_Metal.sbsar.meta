@@ -21,17 +21,9 @@ ScriptedImporter:
     generateAllOutputs: 0
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://Metal\" label=\"\" >\n </sbspreset>\n"
-    shaderName: Standard
+    shaderName: Lightweight Render Pipeline/Lit
     outputNames: baseColor,normal,metallic
-    texturePackingList:
-    - outputName: baseColor
-      alphaSource: baseColor
-    - outputName: normal
-      alphaSource: normal
-    - outputName: roughness
-      alphaSource: roughness
-    - outputName: metallic
-      alphaSource: smoothness
+    texturePackingList: []
     textureParameters:
     - textureName: Metal - roughness
       wrapMode: 0
@@ -66,5 +58,5 @@ ScriptedImporter:
       textureHeight: 1024
       textureFormat: 0
       bGenerateOnLoad: 1
-    material: {instanceID: 0}
+    material: {fileID: 2100000, guid: ca62a985a51e59645b00bf3ce97339be, type: 3}
     generatedTextures: []
