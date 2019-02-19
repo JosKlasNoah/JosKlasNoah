@@ -21,13 +21,10 @@ namespace Custom.GameManager
         AudioSource _currentAudioSource;
         PlayerController _player;
         SaveDataContainer _saveData = new SaveDataContainer();
-<<<<<<< Updated upstream
 
         float[] _objecInteractDistance = new float[] { 1, 2 };
 
         public static float[] objectInteractDistance => instance._objecInteractDistance;
-=======
->>>>>>> Stashed changes
 
         public static PlayerController CurrentPlayerController
         {

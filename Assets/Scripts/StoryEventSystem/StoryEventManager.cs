@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-<<<<<<< Updated upstream
-=======
+
 using UnityEngine.Events;
->>>>>>> Stashed changes
 
 namespace Custom.Story
 {
@@ -20,11 +18,7 @@ namespace Custom.Story
     [Serializable]
     public class StoryEventContainer
     {
-<<<<<<< Updated upstream
         //public StoryDelegate _storyDel = new StoryDelegate();
-=======
-        public StoryDelegate _storyDel = new StoryDelegate();
->>>>>>> Stashed changes
 
         public string _eventName = "DefaultEventName";
         public TriggerType _storyEventTriggerType = TriggerType.Awake;
@@ -93,13 +87,6 @@ namespace Custom.Story
     }
 
     [Serializable]
-    public class StoryEventNameContainer
-    {
-        public string _eventName = "DefaultEventName";
-        public bool _Completed = false;
-    }
-
-    [Serializable]
     public class StoryContainer
     {
         public AudioClip _audioToPlay;
@@ -107,8 +94,6 @@ namespace Custom.Story
 
         public void ExecuteStoryEvent()
         {
-
-
             if (_audioToPlay == null)
             {
                 Debug.Log("NoAudioSourceFound");
@@ -131,7 +116,6 @@ namespace Custom.Story
     [Serializable]
     public class StoryDelegate
     {
-<<<<<<< Updated upstream
         public string _className = "";// we only care for editor purpose
         public string _functionName = "noEvent";
         public List<TypeObjectWrapper> _functionParameters = new List<TypeObjectWrapper>();
@@ -153,17 +137,6 @@ namespace Custom.Story
             }
 
             return temp;
-=======
-        [SerializeField]
-        public string _functionName = "noEvent";
-        [SerializeField]
-        public List<TypeObjectWrapper> _functionParameters = new List<TypeObjectWrapper>();
-
-        List<object> _runTimeList = new List<object>();
-
-        void Invoke()
-        {
->>>>>>> Stashed changes
 
         }
 
@@ -189,21 +162,13 @@ namespace Custom.Story
             }
         }
 
-<<<<<<< Updated upstream
         public static List<string> MethodsToString(List<MethodInfo> pMethodInfo, bool addClassName = false)
-=======
-        public static List<string> MethodToString(List<MethodInfo> pMethodInfo)
->>>>>>> Stashed changes
         {
             List<string> temp = new List<string>();
 
             foreach (MethodInfo item in pMethodInfo)
             {
-<<<<<<< Updated upstream
                 temp.Add((addClassName ? item.ReflectedType + "/" : "") + item.Name);
-=======
-                temp.Add(item.Name);
->>>>>>> Stashed changes
             }
             return temp;
         }
@@ -230,7 +195,6 @@ namespace Custom.Story
             return temp;
         }
 
-<<<<<<< Updated upstream
         public static MethodInfo GetMethod(string name)
         {
             foreach (MethodInfo item in GetAllMethods())
@@ -269,56 +233,22 @@ namespace Custom.Story
             foreach (MethodInfo items in pClass.GetMethods(BindingFlags.Static | BindingFlags.Public))
             {
                 AllMethods.Add(items);
-=======
-        public static List<MethodInfo> GetAllMethods()
-        {
-            List<MethodInfo> AllMethods = new List<MethodInfo>();
-
-            foreach (Type classType in StoryEventManager._EventExecutionMehtods)
-            {
-                foreach (MethodInfo items in classType.GetMethods(BindingFlags.Static | BindingFlags.Public))
-                {
-                    AllMethods.Add(items);
-                }
             }
 
             return AllMethods;
         }
 
-        public static List<string> GetAllMethodsAsString()
-        {
-            List<string> AllMethods = new List<string>();
-
-            foreach (Type classType in StoryEventManager._EventExecutionMehtods)
-            {
-                foreach (MethodInfo items in classType.GetMethods(BindingFlags.Static | BindingFlags.Public))
-                {
-                    AllMethods.Add(items.Name);
-                }
->>>>>>> Stashed changes
-            }
-
-            return AllMethods;
-        }
-
-<<<<<<< Updated upstream
         public static List<string> GetAllMethodsAsString()
         {
             return MethodsToString(GetAllMethods());
         }
 
-=======
->>>>>>> Stashed changes
         public static Type[] GetMethodParameterTypes(MethodInfo _methodInfo)
         {
             List<Type> tempT = new List<Type>();
             foreach (var itemm in _methodInfo.GetParameters())
             {
-<<<<<<< Updated upstream
                 tempT.Add(Type.GetType(itemm.ParameterType.AssemblyQualifiedName + itemm.ParameterType.Name, true));
-=======
-                tempT.Add(Type.GetType(itemm.ParameterType.FullName));
->>>>>>> Stashed changes
             }
 
             return tempT.ToArray();
@@ -328,7 +258,6 @@ namespace Custom.Story
     [System.Serializable]
     public class TypeObjectWrapper
     {
-<<<<<<< Updated upstream
         public static Dictionary<valueType, string> _valueString = new Dictionary<valueType, string>()
         {
             { valueType.Int, "_int" },
@@ -347,17 +276,12 @@ namespace Custom.Story
             {typeof(GameObject),valueType.UnityObject }
         };
 
-=======
->>>>>>> Stashed changes
         public enum valueType
         {
             Int,
             Float,
             Bool,
-<<<<<<< Updated upstream
             Vector3,
-=======
->>>>>>> Stashed changes
             UnityObject
         }
 
@@ -365,11 +289,8 @@ namespace Custom.Story
         public float _float = 0;
         public bool _bool = false;
         public UnityEngine.Object _unityObject;
-<<<<<<< Updated upstream
         public Vector3 _vector3;
 
-=======
->>>>>>> Stashed changes
         public valueType _currentValueType;
 
         public TypeObjectWrapper(Type currentWrapperType)
@@ -384,7 +305,6 @@ namespace Custom.Story
 
         public static valueType getValueType(Type pType)
         {
-<<<<<<< Updated upstream
             return _valueType[pType];
         }
 
@@ -423,64 +343,6 @@ namespace Custom.Story
             _currentValueType = valueType;
         }
 
-=======
-            if (pType == typeof(int))
-            {
-                return valueType.Int;
-            }
-            else if (pType == typeof(float))
-            {
-                return valueType.Float;
-            }
-            else if (pType == typeof(bool))
-            {
-                return valueType.Bool;
-            }
-            else if (pType == typeof(GameObject))
-            {
-                return valueType.UnityObject;
-            }
-
-            Debug.LogWarning("not implemented type");
-            return valueType.Bool;
-        }
-
-        public void SetValueType(object pObject)
-        {
-            SetValueType(pObject.GetType());
-        }
-
-        public void SetValueType(Type pType)
-        {
-            _currentValueType = getValueType(pType);
-        }
-
-        public void SetValue(object pValue)
-        {
-
-            valueType valueType = getValueType(pValue.GetType());
-            switch (valueType)
-            {
-                case valueType.Int:
-                    _int = (int) pValue;
-                    break;
-                case valueType.Float:
-                    _float = (float) pValue;
-                    break;
-                case valueType.Bool:
-                    _bool = (bool) pValue;
-                    break;
-                case valueType.UnityObject:
-                    _unityObject = (UnityEngine.Object) pValue;
-                    break;
-                default:
-                    Debug.LogWarning("not implemented type");
-                    break;
-            }
-            _currentValueType = valueType;
-        }
-
->>>>>>> Stashed changes
         public object GetValue()
         {
             switch (_currentValueType)
@@ -491,11 +353,8 @@ namespace Custom.Story
                     return _float;
                 case valueType.Bool:
                     return _bool;
-<<<<<<< Updated upstream
                 case valueType.Vector3:
                     return _vector3;
-=======
->>>>>>> Stashed changes
                 case valueType.UnityObject:
                     return _unityObject;
                 default:
@@ -505,17 +364,10 @@ namespace Custom.Story
         }
     }
 
-
-
     public class StoryEventManager
     {
-<<<<<<< Updated upstream
         static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(GrayKey) };
         static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler), typeof(RepeatableEvents) };
-=======
-        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(TestObjectInteraction) };
-        public static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler) };
->>>>>>> Stashed changes
         static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
         List<string> _completedStoryEvents = new List<string>();
 
@@ -576,7 +428,6 @@ namespace Custom.Story
             return _triggerTypes[index].Name;
         }
 
-<<<<<<< Updated upstream
 
         public static List<string> GetEventExecutionMethodsAsString()
         {
@@ -600,9 +451,6 @@ namespace Custom.Story
 
 
         public static void QueStoryEvents(List<StoryContainer> newEvents, string EventName)
-=======
-        public static void QueStoryEvents(List<StoryContainer> newEvents)
->>>>>>> Stashed changes
         {
 
             instance.FinishStoryEvent(EventName);

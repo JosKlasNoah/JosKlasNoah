@@ -62,77 +62,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         CalculativeRect = new Vector2(position.x, position.y);
         EditorGUI.BeginProperty(position, label, property);
 
-
-        StoryEvent temp = ((StoryEvent) property.serializedObject.targetObject);
-
-        List<System.Reflection.MethodInfo> atemp = StoryDelegate.GetAllMethods();
-        List<string> ctemp = StoryDelegate.MethodToString(atemp);
-
-        int _oldStringIndex = 0;
-        SerializedProperty tempBase = property.FindPropertyRelative("_storyDel");
-
-        // if ( != null && property.FindPropertyRelative("_storyDel").FindPropertyRelative("_storyDel") != null)
-        _oldStringIndex = ctemp.IndexOf(tempBase.FindPropertyRelative("_functionName").stringValue);
-
-        _oldStringIndex = (_oldStringIndex) < 0 ? 0 : _oldStringIndex;
-
-        EditorGUI.LabelField(CalculateRect(150, 0), tempBase.FindPropertyRelative("_functionName").stringValue);
-
-        NextLine(25);
-
-        int _newStringIndex = EditorGUI.Popup(CalculateRect(150, 0), _oldStringIndex, ctemp.ToArray());
-
-        if (_newStringIndex != _oldStringIndex)
-        {
-            System.Reflection.MethodInfo foundMethod = atemp[_newStringIndex];
-
-
-            tempBase.FindPropertyRelative("_functionName").stringValue = foundMethod.Name;
-
-
-            tempBase = tempBase.FindPropertyRelative("_functionParameters");
-            tempBase.ClearArray();
-
-            System.Type[] parameterTypes = StoryDelegate.GetMethodParameterTypes(foundMethod);
-
-
-            Debug.Log(parameterTypes.Length);
-            for (int i = 0; i < parameterTypes.Length; i++)
-            {
-                NextLine(25);
-                tempBase.InsertArrayElementAtIndex(i);
-                SerializedProperty currentElement = tempBase.GetArrayElementAtIndex(i);
-                // SetTypeObjectWrapperValue(currentElement, parameterTypes[i]);
-                DrawPropertyForCustomType(CalculateRect(30, 0), GetPropertyValueForCustomType(currentElement, parameterTypes[i]));
-            }
-        }
-        else
-        {
-            tempBase = tempBase.FindPropertyRelative("_functionParameters");
-
-            System.Reflection.MethodInfo foundMethod = atemp[_oldStringIndex];
-            System.Type[] parameterTypes = StoryDelegate.GetMethodParameterTypes(foundMethod);
-
-            Debug.Log(parameterTypes[0]);
-
-            for (int i = 0; i < tempBase.arraySize || i <= parameterTypes.Length; i++)
-            {
-                NextLine(25);
-                tempBase.InsertArrayElementAtIndex(i);
-                SerializedProperty currentElement = tempBase.GetArrayElementAtIndex(i);
-                DrawPropertyForCustomType(CalculateRect(30, 0), GetPropertyValueForCustomType(currentElement, parameterTypes[0]));
-            }
-        }
-
-
-
-        #region temp hidden
-        // if (property.FindPropertyRelative("test").obj)
-        //   EditorGUI.LabelField(CalculateRect(70, 0), property.FindPropertyRelative("test").FindPropertyRelative("_functionName").stringValue);
-        //SetValue(DrawPropertyForCustomType(CalculateRect(70, 0), temp.test.GetValue(), temp.test.getValueType()));
-
-        /*
-        NextLine(30);
         EditorGUI.LabelField(CalculateRect(position.width, 0, true), "", GUI.skin.horizontalSlider);
 
         NextLine(25);
@@ -260,7 +189,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         }
     }
 
-<<<<<<< Updated upstream
     void DrawPropertyForCustomType(Rect trans, SerializedProperty objectWrapper)
     {
         TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
@@ -291,11 +219,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
                 Debug.LogWarning("shit aint implemented yet");
                 return null;
         }
-=======
-    */
-        #endregion
-        EditorGUI.EndProperty();
->>>>>>> Stashed changes
     }
 
     void SetTypeObjectWrapperValue(SerializedProperty objectWrapper, System.Type pValueType)
@@ -306,94 +229,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
 
         return;
-    }
-
-    object GetDefaultValueForType(TypeObjectWrapper.valueType vt)
-    {
-        switch (vt)
-        {
-            case TypeObjectWrapper.valueType.Int:
-                return 0;
-            case TypeObjectWrapper.valueType.Float:
-                return 0f;
-            case TypeObjectWrapper.valueType.Bool:
-                return false;
-            case TypeObjectWrapper.valueType.UnityObject:
-                return null;
-            default:
-                return null;
-        }
-    }
-
-    object DrawPropertyForCustomType(Rect trans, object currentValue)
-    {
-        TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(currentValue.GetType());
-        switch (vt)
-        {
-            case TypeObjectWrapper.valueType.Int:
-                return EditorGUI.IntField(trans, (int) currentValue);
-            case TypeObjectWrapper.valueType.Float:
-                return EditorGUI.FloatField(trans, (float) currentValue);
-            case TypeObjectWrapper.valueType.Bool:
-                return EditorGUI.Toggle(trans, (bool) currentValue);
-            case TypeObjectWrapper.valueType.UnityObject:
-                return EditorGUI.ObjectField(trans, (GameObject) currentValue, typeof(GameObject), true);
-            default:
-                Debug.LogWarning("shit aint implemented yet");
-                return null;
-        }
-
-    }
-
-    object GetPropertyValueForCustomType(SerializedProperty objectWrapper, System.Type pValueType)
-    {
-        TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(pValueType);
-        switch (vt)
-        {
-            case TypeObjectWrapper.valueType.Int:
-                return objectWrapper.FindPropertyRelative("_int").intValue;
-
-            case TypeObjectWrapper.valueType.Float:
-                return objectWrapper.FindPropertyRelative("_float").floatValue;
-
-            case TypeObjectWrapper.valueType.Bool:
-                return objectWrapper.FindPropertyRelative("_bool").boolValue;
-
-            case TypeObjectWrapper.valueType.UnityObject:
-                return objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue;
-
-            default:
-                Debug.LogWarning("shit aint implemented yet");
-                return null;
-        }
-    }
-
-    void SetTypeObjectWrapperValue(SerializedProperty objectWrapper, System.Type pValueType)
-    {
-        TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(pValueType);
-        switch (vt)
-        {
-            case TypeObjectWrapper.valueType.Int:
-                objectWrapper.FindPropertyRelative("_int").intValue = 0;
-
-                break;
-            case TypeObjectWrapper.valueType.Float:
-                objectWrapper.FindPropertyRelative("_float").floatValue = 0f;
-
-                break;
-            case TypeObjectWrapper.valueType.Bool:
-                objectWrapper.FindPropertyRelative("_bool").boolValue = false;
-
-                break;
-            case TypeObjectWrapper.valueType.UnityObject:
-                objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue = null;
-                break;
-            default:
-                Debug.LogWarning("shit aint implemented yet");
-                break;
-        }
-
-        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int) vt;
     }
 
     object GetDefaultValueForType(TypeObjectWrapper.valueType vt)
