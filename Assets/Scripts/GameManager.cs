@@ -10,7 +10,7 @@ namespace Custom.GameManager
     [SerializeField]
     class SaveDataContainer
     {
-        public float mouseVelocity = 3;
+        public float mouseVelocity = 8f;
     }
 
     public class GameManager
@@ -55,7 +55,7 @@ namespace Custom.GameManager
 
         public static float MouseVelocity
         {
-            get => instance._saveData.mouseVelocity;
+            get => instance._saveData.mouseVelocity * 10;
             set
             {
                 if (instance == null)

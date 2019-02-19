@@ -20,15 +20,9 @@ ScriptedImporter:
     generateAllOutputs: 0
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://Closet_Wood_\" label=\"\" >\n </sbspreset>\n"
-    shaderName: Standard
+    shaderName: Lightweight Render Pipeline/Lit
     outputNames: normal,baseColor
-    texturePackingList:
-    - outputName: normal
-      alphaSource: normal
-    - outputName: baseColor
-      alphaSource: baseColor
-    - outputName: roughness
-      alphaSource: roughness
+    texturePackingList: []
     textureParameters:
     - textureName: Closet_Wood_ - normal
       wrapMode: 0
