@@ -11,11 +11,14 @@ public class StoryEvent : MonoBehaviour
 
     BoxCollider _collider;
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     #region Editor
     private void OnValidate()
     {
-
+      
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -66,6 +69,14 @@ public class StoryEvent : MonoBehaviour
     }
     #endregion;
 
+<<<<<<< Updated upstream
+=======
+    private void Awake()
+    {
+
+        _storyEvents[0]._storyDel = new StoryDelegate(StoryDelegate.GetAllMethods()[0]);
+    }
+>>>>>>> Stashed changes
 
     private void Awake()
     {

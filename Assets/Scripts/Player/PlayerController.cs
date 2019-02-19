@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         GameManager.CurrentPlayerController = this;
+        Application.targetFrameRate = -1;
     }
 
     private void Update()
@@ -120,7 +121,6 @@ public class PlayerController : MonoBehaviour
 
         _isOnGround = IsGrounded();
         _currentGroundVelocity = GetGroundMovingSpeed();
-        Debug.Log(_currentGroundVelocity);
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -128,7 +128,6 @@ public class PlayerController : MonoBehaviour
         }
 
         _moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
-        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed() * Time.deltaTime;
         #endregion
 
         #region LookAround
@@ -180,12 +179,14 @@ public class PlayerController : MonoBehaviour
             Debug.Log("jump key detected");
         }
 
-        float currentMinMax = MinMaxMoveSpeed();
+        _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed();
+
+        float currentMinMax = MinMaxMoveSpeed() *Time.fixedDeltaTime;
 
         _moveInput = new Vector3(
-            Mathf.Clamp(_moveInput.x, -currentMinMax, currentMinMax), //x
+            Mathf.Clamp(_moveInput.x * Time.fixedDeltaTime, -currentMinMax, currentMinMax), //x
            _rb.velocity.y, //y
-            Mathf.Clamp(_moveInput.z, -currentMinMax, currentMinMax) //z
+            Mathf.Clamp(_moveInput.z * Time.fixedDeltaTime, -currentMinMax, currentMinMax) //z
             );
 
         _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity * Time.fixedDeltaTime);
