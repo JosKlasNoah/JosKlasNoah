@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
 
         _moveInput = new Vector3(
             Mathf.Clamp(_moveInput.x * Time.fixedDeltaTime, -currentMinMax, currentMinMax), //x
-           !_isOnGround || !_jumpKeyPressed ? _rb.velocity.y : -Physics.gravity.y * Time.fixedDeltaTime, //y
+            !_isOnGround || _jumpKeyPressed ? _rb.velocity.y : -Physics.gravity.y * Time.fixedDeltaTime, //y
             Mathf.Clamp(_moveInput.z * Time.fixedDeltaTime, -currentMinMax, currentMinMax) //z
             );
 
