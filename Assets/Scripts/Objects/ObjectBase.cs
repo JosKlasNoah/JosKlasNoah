@@ -21,32 +21,36 @@ public class ObjectBase : MonoBehaviour, IInteractable
 
     protected virtual void Update()
     {
-        if (transform.position.y < -1)
-            Destroy(gameObject);
+       // if (transform.position.y < -1)
+         //   Destroy(gameObject);
     }
 
     public virtual void OnItemInteract(PlayerController owningPlayer)
     {
-
+        //als de speler geen object vast houdt
         if (owningPlayer.holdingObject == null)
         {
+            //zet rigidbody collsion type
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rb.isKinematic = true;
-            bc.enabled = false;
             rb.interpolation = RigidbodyInterpolation.None;
-         
 
+            //disable box collider
+            bc.enabled = false;
+
+            //zet de parrant van dit object naar de player camera
             gameObject.transform.SetParent(owningPlayer.Cam.transform);
+            //holding object staat gelijk aan het IInteractable interface van dit object
             owningPlayer.holdingObject = GetComponent<IInteractable>();
         }
-        else if (transform.localPosition.z > 0.15f)
+        else if (transform.localPosition.z > GameManager.objectInteractDistance[0])
         {
             gameObject.transform.SetParent(null);
             owningPlayer.holdingObject = null;
 
             bc.enabled = true;
             rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
         }
     }

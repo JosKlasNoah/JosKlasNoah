@@ -10,7 +10,7 @@ namespace Custom.GameManager
     [SerializeField]
     class SaveDataContainer
     {
-        public float mouseVelocity = 3;
+        public float mouseVelocity = 8f;
     }
 
     public class GameManager
@@ -52,7 +52,7 @@ namespace Custom.GameManager
 
         public static float MouseVelocity
         {
-            get => instance._saveData.mouseVelocity;
+            get => instance._saveData.mouseVelocity * 10;
             set
             {
                 if (instance == null)
@@ -71,7 +71,7 @@ namespace Custom.GameManager
                 Application.targetFrameRate = -1;
 
 #if UNITY_STANDALONE
-                //  LoadScenes();
+                  //StartGame();
 #endif
                 instance = this;
             }
@@ -88,13 +88,10 @@ namespace Custom.GameManager
         }
 
 
-        void LoadScenes()
+        public static void StartGame()
         {
             SceneManager.LoadScene(0, LoadSceneMode.Single);
-            SceneManager.LoadScene(1, LoadSceneMode.Additive);
-            SceneManager.LoadScene(3, LoadSceneMode.Additive);
-            SceneManager.LoadScene(4, LoadSceneMode.Additive);
-            SceneManager.LoadScene(5, LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);  
         }
 
         public static void PlayAudio(AudioClip PAudioClip)
