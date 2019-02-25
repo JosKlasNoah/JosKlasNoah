@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Custom.Story
 {
+
+    #region Containers
     using Custom.GameManager;
     using System.Linq;
 
@@ -310,16 +312,16 @@ namespace Custom.Story
             switch (valueType)
             {
                 case valueType.Int:
-                    _int = (int)pValue;
+                    _int = (int) pValue;
                     break;
                 case valueType.Float:
-                    _float = (float)pValue;
+                    _float = (float) pValue;
                     break;
                 case valueType.Bool:
-                    _bool = (bool)pValue;
+                    _bool = (bool) pValue;
                     break;
                 case valueType.UnityObject:
-                    _unityObject = (UnityEngine.Object)pValue;
+                    _unityObject = (UnityEngine.Object) pValue;
                     break;
                 default:
                     Debug.LogWarning("not implemented type");
@@ -348,6 +350,7 @@ namespace Custom.Story
             }
         }
     }
+    #endregion
 
     public class StoryEventManager
     {
@@ -367,7 +370,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig)Resources.Load("EditorConfig")).EventExecutionMethods;
+                    return ((EditorConfig) Resources.Load("EditorConfig")).EventExecutionMethods;
                 }
 
                 return instance._config.EventExecutionMethods;
@@ -380,7 +383,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig)Resources.Load("EditorConfig")).TriggerTypes;
+                    return ((EditorConfig) Resources.Load("EditorConfig")).TriggerTypes;
                 }
 
                 return instance._config.TriggerTypes;
@@ -389,7 +392,7 @@ namespace Custom.Story
 
         public StoryEventManager()
         {
-            _config = (EditorConfig)Resources.Load("EditorConfig");
+            _config = (EditorConfig) Resources.Load("EditorConfig");
             instance = this;
         }
 
@@ -458,7 +461,7 @@ namespace Custom.Story
 
                     foreach (string item in _childStringList)
                     {
-                        temp.Add(AppendString + "/"+ item);
+                        temp.Add(AppendString + "/" + item);
                     }
                 }
             }
@@ -523,16 +526,17 @@ namespace Custom.Story
 
             return temp;
         }
+
         public static string GetEventExecutionMethodAsString(int index)
         {
             return EventExecutionMethods[index].ToString();
         }
 
-
         public static void QueStoryEvents(List<StoryContainer> newEvents, string EventName)
         {
 
             instance.FinishStoryEvent(EventName);
+
             if (newEvents.Count <= 0)
             {
                 Debug.LogWarning("new event que is empty");
@@ -541,7 +545,11 @@ namespace Custom.Story
 
             if (instance._storyEventQue.Count > 0)
             {
-                instance._storyEventQue.Clear();
+                do
+                {
+                    instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+                }
+                while (instance._storyEventQue.Count > 0);
             }
 
             foreach (StoryContainer pStoryEvent in newEvents)

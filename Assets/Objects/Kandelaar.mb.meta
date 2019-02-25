@@ -1,0 +1,483 @@
+fileFormatVersion: 2
+guid: 8dc463e6e56426d4f9941e7d41b3cec2
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BottomCenter
+    100002: Chain
+    100004: Chain1
+    100006: Chain2
+    100008: Chain3
+    100010: ConnectorBottom1
+    100012: ConnectorBottom2
+    100014: ConnectorBottom3
+    100016: ConnectorBottom4
+    100018: Connectors
+    100020: ConnectorTop
+    100022: Kaars1
+    100024: Kaars2
+    100026: Kaars3
+    100028: Kaars4
+    100030: Kaars5
+    100032: Kaars6
+    100034: Kaars7
+    100036: Kaars8
+    100038: Kaarsen
+    100040: //RootNode
+    100042: MiddleCenter
+    100044: Top
+    100046: TopChain
+    100048: Tube_5_10
+    100050: Tube_5_11
+    100052: Tube_5_11 1
+    100054: Tube_5_11 2
+    100056: Tube_5_11 3
+    100058: Tube_5_12
+    100060: Tube_5_12 1
+    100062: Tube_5_12 2
+    100064: Tube_5_12 3
+    100066: Tube_5_13
+    100068: Tube_5_13 1
+    100070: Tube_5_13 2
+    100072: Tube_5_13 3
+    100074: Tube_5_14
+    100076: Tube_5_14 1
+    100078: Tube_5_14 2
+    100080: Tube_5_14 3
+    100082: Tube_5_16
+    100084: Tube_5_16 1
+    100086: Tube_5_16 2
+    100088: Tube_5_16 3
+    100090: Tube_5_17
+    100092: Tube_5_17 1
+    100094: Tube_5_17 2
+    100096: Tube_5_17 3
+    100098: Tube_5_18
+    100100: Tube_5_18 1
+    100102: Tube_5_18 2
+    100104: Tube_5_18 3
+    100106: Tube_5_19
+    100108: Tube_5_19 1
+    100110: Tube_5_19 2
+    100112: Tube_5_19 3
+    100114: Tube_5_20
+    100116: Tube_5_20 1
+    100118: Tube_5_20 2
+    100120: Tube_5_20 3
+    100122: Tube_5_21
+    100124: Tube_5_21 1
+    100126: Tube_5_21 2
+    100128: Tube_5_21 3
+    100130: Tube_5_22
+    100132: Tube_5_22 1
+    100134: Tube_5_22 2
+    100136: Tube_5_22 3
+    100138: Tube_5_23
+    100140: Tube_5_23 1
+    100142: Tube_5_23 2
+    100144: Tube_5_23 3
+    100146: Tube_5_24
+    100148: Tube_5_24 1
+    100150: Tube_5_24 2
+    100152: Tube_5_24 3
+    100154: Tube_5_5
+    100156: Tube_5_6
+    100158: Tube_5_7
+    100160: Tube_5_8
+    100162: Tube_5_9
+    400000: BottomCenter
+    400002: Chain
+    400004: Chain1
+    400006: Chain2
+    400008: Chain3
+    400010: ConnectorBottom1
+    400012: ConnectorBottom2
+    400014: ConnectorBottom3
+    400016: ConnectorBottom4
+    400018: Connectors
+    400020: ConnectorTop
+    400022: Kaars1
+    400024: Kaars2
+    400026: Kaars3
+    400028: Kaars4
+    400030: Kaars5
+    400032: Kaars6
+    400034: Kaars7
+    400036: Kaars8
+    400038: Kaarsen
+    400040: //RootNode
+    400042: MiddleCenter
+    400044: Top
+    400046: TopChain
+    400048: Tube_5_10
+    400050: Tube_5_11
+    400052: Tube_5_11 1
+    400054: Tube_5_11 2
+    400056: Tube_5_11 3
+    400058: Tube_5_12
+    400060: Tube_5_12 1
+    400062: Tube_5_12 2
+    400064: Tube_5_12 3
+    400066: Tube_5_13
+    400068: Tube_5_13 1
+    400070: Tube_5_13 2
+    400072: Tube_5_13 3
+    400074: Tube_5_14
+    400076: Tube_5_14 1
+    400078: Tube_5_14 2
+    400080: Tube_5_14 3
+    400082: Tube_5_16
+    400084: Tube_5_16 1
+    400086: Tube_5_16 2
+    400088: Tube_5_16 3
+    400090: Tube_5_17
+    400092: Tube_5_17 1
+    400094: Tube_5_17 2
+    400096: Tube_5_17 3
+    400098: Tube_5_18
+    400100: Tube_5_18 1
+    400102: Tube_5_18 2
+    400104: Tube_5_18 3
+    400106: Tube_5_19
+    400108: Tube_5_19 1
+    400110: Tube_5_19 2
+    400112: Tube_5_19 3
+    400114: Tube_5_20
+    400116: Tube_5_20 1
+    400118: Tube_5_20 2
+    400120: Tube_5_20 3
+    400122: Tube_5_21
+    400124: Tube_5_21 1
+    400126: Tube_5_21 2
+    400128: Tube_5_21 3
+    400130: Tube_5_22
+    400132: Tube_5_22 1
+    400134: Tube_5_22 2
+    400136: Tube_5_22 3
+    400138: Tube_5_23
+    400140: Tube_5_23 1
+    400142: Tube_5_23 2
+    400144: Tube_5_23 3
+    400146: Tube_5_24
+    400148: Tube_5_24 1
+    400150: Tube_5_24 2
+    400152: Tube_5_24 3
+    400154: Tube_5_5
+    400156: Tube_5_6
+    400158: Tube_5_7
+    400160: Tube_5_8
+    400162: Tube_5_9
+    2100000: lambert1
+    2300000: BottomCenter
+    2300002: ConnectorBottom1
+    2300004: ConnectorBottom2
+    2300006: ConnectorBottom3
+    2300008: ConnectorBottom4
+    2300010: ConnectorTop
+    2300012: Kaars1
+    2300014: Kaars2
+    2300016: Kaars3
+    2300018: Kaars4
+    2300020: Kaars5
+    2300022: Kaars6
+    2300024: Kaars7
+    2300026: Kaars8
+    2300028: MiddleCenter
+    2300030: Top
+    2300032: Tube_5_10
+    2300034: Tube_5_11
+    2300036: Tube_5_11 1
+    2300038: Tube_5_11 2
+    2300040: Tube_5_11 3
+    2300042: Tube_5_12
+    2300044: Tube_5_12 1
+    2300046: Tube_5_12 2
+    2300048: Tube_5_12 3
+    2300050: Tube_5_13
+    2300052: Tube_5_13 1
+    2300054: Tube_5_13 2
+    2300056: Tube_5_13 3
+    2300058: Tube_5_14
+    2300060: Tube_5_14 1
+    2300062: Tube_5_14 2
+    2300064: Tube_5_14 3
+    2300066: Tube_5_16
+    2300068: Tube_5_16 1
+    2300070: Tube_5_16 2
+    2300072: Tube_5_16 3
+    2300074: Tube_5_17
+    2300076: Tube_5_17 1
+    2300078: Tube_5_17 2
+    2300080: Tube_5_17 3
+    2300082: Tube_5_18
+    2300084: Tube_5_18 1
+    2300086: Tube_5_18 2
+    2300088: Tube_5_18 3
+    2300090: Tube_5_19
+    2300092: Tube_5_19 1
+    2300094: Tube_5_19 2
+    2300096: Tube_5_19 3
+    2300098: Tube_5_20
+    2300100: Tube_5_20 1
+    2300102: Tube_5_20 2
+    2300104: Tube_5_20 3
+    2300106: Tube_5_21
+    2300108: Tube_5_21 1
+    2300110: Tube_5_21 2
+    2300112: Tube_5_21 3
+    2300114: Tube_5_22
+    2300116: Tube_5_22 1
+    2300118: Tube_5_22 2
+    2300120: Tube_5_22 3
+    2300122: Tube_5_23
+    2300124: Tube_5_23 1
+    2300126: Tube_5_23 2
+    2300128: Tube_5_23 3
+    2300130: Tube_5_24
+    2300132: Tube_5_24 1
+    2300134: Tube_5_24 2
+    2300136: Tube_5_24 3
+    2300138: Tube_5_5
+    2300140: Tube_5_6
+    2300142: Tube_5_7
+    2300144: Tube_5_8
+    2300146: Tube_5_9
+    3300000: BottomCenter
+    3300002: ConnectorBottom1
+    3300004: ConnectorBottom2
+    3300006: ConnectorBottom3
+    3300008: ConnectorBottom4
+    3300010: ConnectorTop
+    3300012: Kaars1
+    3300014: Kaars2
+    3300016: Kaars3
+    3300018: Kaars4
+    3300020: Kaars5
+    3300022: Kaars6
+    3300024: Kaars7
+    3300026: Kaars8
+    3300028: MiddleCenter
+    3300030: Top
+    3300032: Tube_5_10
+    3300034: Tube_5_11
+    3300036: Tube_5_11 1
+    3300038: Tube_5_11 2
+    3300040: Tube_5_11 3
+    3300042: Tube_5_12
+    3300044: Tube_5_12 1
+    3300046: Tube_5_12 2
+    3300048: Tube_5_12 3
+    3300050: Tube_5_13
+    3300052: Tube_5_13 1
+    3300054: Tube_5_13 2
+    3300056: Tube_5_13 3
+    3300058: Tube_5_14
+    3300060: Tube_5_14 1
+    3300062: Tube_5_14 2
+    3300064: Tube_5_14 3
+    3300066: Tube_5_16
+    3300068: Tube_5_16 1
+    3300070: Tube_5_16 2
+    3300072: Tube_5_16 3
+    3300074: Tube_5_17
+    3300076: Tube_5_17 1
+    3300078: Tube_5_17 2
+    3300080: Tube_5_17 3
+    3300082: Tube_5_18
+    3300084: Tube_5_18 1
+    3300086: Tube_5_18 2
+    3300088: Tube_5_18 3
+    3300090: Tube_5_19
+    3300092: Tube_5_19 1
+    3300094: Tube_5_19 2
+    3300096: Tube_5_19 3
+    3300098: Tube_5_20
+    3300100: Tube_5_20 1
+    3300102: Tube_5_20 2
+    3300104: Tube_5_20 3
+    3300106: Tube_5_21
+    3300108: Tube_5_21 1
+    3300110: Tube_5_21 2
+    3300112: Tube_5_21 3
+    3300114: Tube_5_22
+    3300116: Tube_5_22 1
+    3300118: Tube_5_22 2
+    3300120: Tube_5_22 3
+    3300122: Tube_5_23
+    3300124: Tube_5_23 1
+    3300126: Tube_5_23 2
+    3300128: Tube_5_23 3
+    3300130: Tube_5_24
+    3300132: Tube_5_24 1
+    3300134: Tube_5_24 2
+    3300136: Tube_5_24 3
+    3300138: Tube_5_5
+    3300140: Tube_5_6
+    3300142: Tube_5_7
+    3300144: Tube_5_8
+    3300146: Tube_5_9
+    4300000: Tube_5_11
+    4300002: Tube_5_12
+    4300004: Tube_5_13
+    4300006: Tube_5_14
+    4300008: Tube_5_16
+    4300010: Tube_5_17
+    4300012: Tube_5_18
+    4300014: Tube_5_19
+    4300016: Tube_5_20
+    4300018: Tube_5_21
+    4300020: Tube_5_22
+    4300022: Tube_5_23
+    4300024: Tube_5_24
+    4300026: Tube_5_5
+    4300028: Tube_5_6
+    4300030: Tube_5_7
+    4300032: Tube_5_8
+    4300034: Tube_5_9
+    4300036: Tube_5_10
+    4300038: Top
+    4300040: MiddleCenter
+    4300042: BottomCenter
+    4300044: Kaars1
+    4300046: Kaars2
+    4300048: Kaars3
+    4300050: Kaars4
+    4300052: Kaars5
+    4300054: Kaars6
+    4300056: Kaars7
+    4300058: Kaars8
+    4300060: ConnectorTop
+    4300062: ConnectorBottom1
+    4300064: ConnectorBottom2
+    4300066: ConnectorBottom3
+    4300068: ConnectorBottom4
+    4300070: Tube_5_11
+    4300072: Tube_5_12
+    4300074: Tube_5_13
+    4300076: Tube_5_14
+    4300078: Tube_5_16
+    4300080: Tube_5_17
+    4300082: Tube_5_18
+    4300084: Tube_5_19
+    4300086: Tube_5_20
+    4300088: Tube_5_21
+    4300090: Tube_5_22
+    4300092: Tube_5_23
+    4300094: Tube_5_24
+    4300096: Tube_5_11
+    4300098: Tube_5_12
+    4300100: Tube_5_13
+    4300102: Tube_5_14
+    4300104: Tube_5_16
+    4300106: Tube_5_17
+    4300108: Tube_5_18
+    4300110: Tube_5_19
+    4300112: Tube_5_20
+    4300114: Tube_5_21
+    4300116: Tube_5_22
+    4300118: Tube_5_23
+    4300120: Tube_5_24
+    4300122: Tube_5_11
+    4300124: Tube_5_12
+    4300126: Tube_5_13
+    4300128: Tube_5_14
+    4300130: Tube_5_16
+    4300132: Tube_5_17
+    4300134: Tube_5_18
+    4300136: Tube_5_19
+    4300138: Tube_5_20
+    4300140: Tube_5_21
+    4300142: Tube_5_22
+    4300144: Tube_5_23
+    4300146: Tube_5_24
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 2abf5842a106bb94a88e4beac046efdf, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
