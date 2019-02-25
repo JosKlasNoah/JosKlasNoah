@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Custom.Story
 {
     using Custom.GameManager;
+    using System.Linq;
 
     public enum TriggerType
     {
@@ -36,7 +37,15 @@ namespace Custom.Story
                 return true;
             }
 
-            if (obj == null) return false;
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (obj.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) == null)
+            {
+                return false;
+            }
 
             {
                 bool HasCompletedAll = true;
@@ -51,28 +60,29 @@ namespace Custom.Story
 
                 if (!HasCompletedAll)
                 {
+                    Debug.Log("has not completed all required events");
                     return false;
                 }
             }
 
             if (_currentInteractionCount >= _interactionCountBeforePlay + _maxInteractionCount)
             {
+                Debug.Log("A");
                 return false;
+
             }
 
             _currentInteractionCount++;
 
             if (_interactionCountBeforePlay >= _currentInteractionCount)
             {
+                Debug.Log("B");
                 return false;
             }
 
-            if (obj.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) != null)
-            {
-                return true;
-            }
 
-            return false;
+            Debug.Log("Exited the loop");
+            return true;
         }
 
     }
@@ -211,7 +221,7 @@ namespace Custom.Story
             {
                 List<MethodInfo> AllMethods = new List<MethodInfo>();
 
-                foreach (Type classType in StoryEventManager.GetEventExecutionMethods())
+                foreach (Type classType in StoryEventManager.EventExecutionMethods)
                 {
                     foreach (MethodInfo items in classType.GetMethods(BindingFlags.Static | BindingFlags.Public))
                     {
@@ -364,13 +374,16 @@ namespace Custom.Story
 
     public class StoryEventManager
     {
-        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(GrayKey) };
+        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(ObjectBase) };
         static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler), typeof(RepeatableEvents) };
+        static List<Type> _triggerTypesWithChildClasses;
         static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
         List<string> _completedStoryEvents = new List<string>();
 
         static StoryEventManager instance;
         Queue<StoryContainer> _storyEventQue = new Queue<StoryContainer>();
+
+        public static List<Type> EventExecutionMethods => _EventExecutionMehtods;
 
         public StoryEventManager()
         {
@@ -412,18 +425,86 @@ namespace Custom.Story
         {
             List<string> temp = new List<string>();
 
-            for (int i = 0; i < _triggerTypes.Count; i++)
+            foreach (var triggerType in _triggerTypes)
             {
+                foreach (var item in GetChildStringList(triggerType))
+                {
+                    temp.Add(item);
+                }
 
-                temp.Add(_triggerTypes[i].Name);
+                
+                
             }
 
             return temp;
         }
 
+        static List<string> GetChildStringList(Type pCType, string AppendString = "")
+        {
+            List<string> temp = new List<string>();
+
+            foreach(Type childClass in GetChildClasses(pCType, true))
+            {
+                if(AppendString == "")
+                {
+                    AppendString = childClass.Name;
+                }
+                else
+                {
+                    AppendString += "/" + childClass.Name;
+                }
+
+                temp.Add(AppendString);
+                
+                foreach (string item in GetChildStringList(pCType,AppendString))
+                {
+                    temp.Add(item);
+                }
+            }
+
+            return temp;
+        }
+
+        public static Type[] GetChildClasses(Type pT, bool pDirectChildOnly = false)
+        {
+            if (_triggerTypesWithChildClasses == null)
+            {
+                CreateTriggerTypesWithChildClasses();
+            }
+            if (pDirectChildOnly)
+            {
+                return _triggerTypesWithChildClasses.Where(t => t.IsSubclassOf(pT)).ToArray();
+            }
+            else
+            {
+                return _triggerTypesWithChildClasses.Where(t => t.BaseType == pT).ToArray();
+            }
+        }
+
+        static void CreateTriggerTypesWithChildClasses()
+        {
+            _triggerTypesWithChildClasses = new List<Type>();
+            foreach (var triggerType in _triggerTypes)
+            {
+                Type[] childClasses = Assembly.GetAssembly(triggerType).GetTypes().Where(t => t.IsSubclassOf(triggerType)).ToArray();
+
+                _triggerTypesWithChildClasses.Add(triggerType);
+
+                foreach (Type ChildTriggerType in childClasses)
+                {
+                    _triggerTypesWithChildClasses.Add(ChildTriggerType);
+                }
+            }
+        }
+
         public static string GetTypeAsString(int index)
         {
-            return _triggerTypes[index].Name;
+            if (_triggerTypesWithChildClasses == null)
+            {
+                CreateTriggerTypesWithChildClasses();
+            }
+
+            return _triggerTypesWithChildClasses[index].Name;
         }
 
 
@@ -441,10 +522,6 @@ namespace Custom.Story
         public static string GetEventExecutionMethodAsString(int index)
         {
             return _EventExecutionMehtods[index].ToString();
-        }
-        public static List<Type> GetEventExecutionMethods()
-        {
-            return _EventExecutionMehtods;
         }
 
 

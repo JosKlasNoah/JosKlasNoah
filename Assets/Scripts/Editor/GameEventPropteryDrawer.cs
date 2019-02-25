@@ -114,6 +114,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
                 DrawFunctionItem(_storyEvent.GetArrayElementAtIndex(y));
             }
         }
+
         EditorGUI.EndProperty();
     }
 
@@ -212,6 +213,9 @@ public class GameEventPropteryDrawer : PropertyDrawer
             case TypeObjectWrapper.valueType.Bool:
                 return objectWrapper.FindPropertyRelative("_bool").boolValue;
 
+            case TypeObjectWrapper.valueType.Vector3:
+                return objectWrapper.FindPropertyRelative("_vector3").vector3Value;
+
             case TypeObjectWrapper.valueType.UnityObject:
                 return objectWrapper.FindPropertyRelative("_unityObject").objectReferenceValue;
 
@@ -227,7 +231,6 @@ public class GameEventPropteryDrawer : PropertyDrawer
         objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int) vt;
         //SerializedProperty prop = objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueString[vt]);
 
-
         return;
     }
 
@@ -241,6 +244,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
                 return 0f;
             case TypeObjectWrapper.valueType.Bool:
                 return false;
+            case TypeObjectWrapper.valueType.Vector3:
+                return Vector3.zero;
             case TypeObjectWrapper.valueType.UnityObject:
                 return null;
             default:
