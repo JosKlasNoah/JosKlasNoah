@@ -448,19 +448,17 @@ namespace Custom.Story
 
             Type[] tempTypeArray = GetChildClasses(pCType, true);
 
-            //AppendString += "/" + pCType.Name;
-
             if (tempTypeArray.Length > 0)
             {
                 temp.Add(AppendString + "/All");
 
                 foreach (Type childClass in tempTypeArray)
                 {
-                    List<string> _childStringList = GetChildStringList(childClass, AppendString);
+                    List<string> _childStringList = GetChildStringList(childClass, childClass.Name);
 
                     foreach (string item in _childStringList)
                     {
-                        temp.Add(AppendString + "/" + item);
+                        temp.Add(AppendString + "/"+ item);
                     }
                 }
             }
@@ -470,6 +468,7 @@ namespace Custom.Story
             }
             return temp;
         }
+
         public static Type[] GetChildClasses(Type pT, bool pDirectChildOnly = false)
         {
             if (_triggerTypesWithChildClasses == null)
@@ -478,11 +477,12 @@ namespace Custom.Story
             }
             if (pDirectChildOnly)
             {
-                return _triggerTypesWithChildClasses.Where(t => t.IsSubclassOf(pT)).ToArray();
+                return _triggerTypesWithChildClasses.Where(t => t.BaseType == pT).ToArray();
             }
             else
             {
-                return _triggerTypesWithChildClasses.Where(t => t.BaseType == pT).ToArray();
+                return _triggerTypesWithChildClasses.Where(t => t.IsSubclassOf(pT)).ToArray();
+
             }
         }
 
