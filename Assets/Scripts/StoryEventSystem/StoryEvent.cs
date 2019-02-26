@@ -83,7 +83,6 @@ public class StoryEvent : MonoBehaviour
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
-            Debug.Log("test");
             if (PstoryEvent.CanExecuteStoryEvent(other.gameObject) && PstoryEvent._storyEventTriggerType == TriggerType.Trigger)
             {
                 StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
