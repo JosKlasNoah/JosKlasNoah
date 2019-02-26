@@ -3,7 +3,7 @@
 		_MainTex ("Texture", 2D) = "white" {}
 		_Color ("Color", Color) = (0,1,1,1)
 		_Ambient ("Ambient", Range(0,1)) = 0.1
-		_Alpha ("Alpha", Range(0,1)) = 0.3
+		//_Alpha ("Alpha", Range(0,1)) = 0.3
 	}
 	SubShader {
 		ZWrite Off
@@ -15,7 +15,7 @@
 
 		Tags {
 			"Queue" = "Transparent"
-			"LightMode"="ForwardBase"
+			"LightMode" = "ForwardBase"
 		}
 
 		Pass {
@@ -39,7 +39,7 @@
 			sampler2D _MainTex;
 			float4 _Color;
 			float _Ambient;
-			float _Alpha;
+			//float _Alpha;
 
 			v2f vert (appdata v) {
 				v2f o;
@@ -54,12 +54,12 @@
 			
 			fixed4 frag (v2f i) : SV_Target {
 				float4 col = _Color;
-				col.a = _Alpha;
+				//col.a = _Alpha;
 				return tex2D(_MainTex,i.uv) * i.diffuseLight * col;
 			}
 			ENDCG
 		}
 
-		UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
+		//UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
 	}
 }
