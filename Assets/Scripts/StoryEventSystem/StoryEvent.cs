@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using Unity.EditorCoroutines.Editor;
+#endif
+
 [DisallowMultipleComponent()]
 public class StoryEvent : MonoBehaviour
 {
@@ -13,9 +17,13 @@ public class StoryEvent : MonoBehaviour
 
 
     #region Editor
+
+#if UNITY_EDITOR
+
+
     private void OnValidate()
     {
-
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -34,7 +42,8 @@ public class StoryEvent : MonoBehaviour
             _collider = GetComponent<BoxCollider>();
             if (_collider == null)
             {
-                StartCoroutine(FixColiderStatus(true));
+                if (gameObject.activeSelf)
+                    StartCoroutine(FixColiderStatus(true));
                 return;
             }
 
@@ -44,26 +53,34 @@ public class StoryEvent : MonoBehaviour
         {
             if (_collider != null)
             {
-           //     StartCoroutine(FixColiderStatus(false));
+                if (gameObject.activeSelf)
+                    StartCoroutine(FixColiderStatus(false));
             }
         }
     }
     //we are not allowed to destory the component in OnValidate this is the workaround (wait till the end of the frame
     IEnumerator FixColiderStatus(bool addCollider)
     {
-        yield return new WaitForEndOfFrame();
+        yield return new EditorWaitForSeconds(.1f);
+
         if (addCollider)
         {
-            gameObject.AddComponent<BoxCollider>();
-            _collider = GetComponent<BoxCollider>();
+            if (_collider == null)
+            {
+                gameObject.AddComponent<BoxCollider>();
+                _collider = GetComponent<BoxCollider>();
 
-            _collider.isTrigger = true;
+                _collider.isTrigger = true;
+            }
         }
         else
         {
-            DestroyImmediate(GetComponent<BoxCollider>());
+
+            DestroyImmediate(_collider);
         }
     }
+
+#endif
     #endregion;
 
 
@@ -71,10 +88,13 @@ public class StoryEvent : MonoBehaviour
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
-            if (PstoryEvent.CanExecuteStoryEvent())
+            if (PstoryEvent._storyEventTriggerType == TriggerType.Awake)
             {
-                StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+                if (PstoryEvent.CanExecuteStoryEvent())
+                {
+                    StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
 
+                }
             }
         }
     }
@@ -83,13 +103,27 @@ public class StoryEvent : MonoBehaviour
     {
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
-            if (PstoryEvent.CanExecuteStoryEvent(other.gameObject) && PstoryEvent._storyEventTriggerType == TriggerType.Trigger)
-            {
-                StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
-                return;
-            }
+            if (PstoryEvent._storyEventTriggerType == TriggerType.TriggerEnter)
+                if (PstoryEvent.CanExecuteStoryEvent(other.gameObject))
+                {
+                    StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+                    return;
+                }
         }
-
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        foreach (StoryEventContainer PstoryEvent in _storyEvents)
+        {
+            if (PstoryEvent._storyEventTriggerType == TriggerType.TriggerExit)
+                if (PstoryEvent.CanExecuteStoryEvent(other.gameObject))
+                {
+                    StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+                    return;
+                }
+        }
+    }
+
 }
 
