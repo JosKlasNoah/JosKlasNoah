@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         _isOnGround = IsGrounded();
-        _currentGroundVelocity = GetGroundMovingSpeed();
+        _currentGroundVelocity = !_isOnGround ? _currentGroundVelocity : GetGroundMovingSpeed();
 
         #region Movement
         if (_jumpKeyPressed)
@@ -196,7 +196,9 @@ public class PlayerController : MonoBehaviour
             _jumpKeyPressed = false;
             Jump();
             Debug.Log("jump key detected");
+            _currentGroundVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
         }
+
 
         _moveInput = Vector3.Normalize(_moveInput) * MinMaxMoveSpeed();
 
@@ -309,19 +311,21 @@ public class PlayerController : MonoBehaviour
 
     float MinMaxMoveSpeed()
     {
-        float _tempAddSpeed = 1;
-
-        if (IsCrouching())
+        if (!IsGrounded())
         {
-            _tempAddSpeed = _crouchSpeed * 100;
+            return _moveSpeed * (_airSpeed * 100);
+        }
+        else if (IsCrouching())
+        {
+            return _moveSpeed * (_crouchSpeed * 100);
         }
         else if (Input.GetButton("Sprint"))
         {
-            _tempAddSpeed = 100 * (_sprintSpeed + 1);
+            return _moveSpeed * ((_sprintSpeed + 1) * 100);
         }
 
 
-        return _moveSpeed * (IsCrouching() ? 100 * _crouchSpeed : 100 * (Input.GetButton("Sprint") ? 1 + _sprintSpeed : 1));
+        return _moveSpeed * 100;
     }
 
     void ChangeHeight(float newHeight)

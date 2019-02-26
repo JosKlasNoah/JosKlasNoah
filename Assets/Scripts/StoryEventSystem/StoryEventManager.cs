@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace Custom.Story
 {
+
+    #region Containers
     using Custom.GameManager;
     using System.Linq;
 
@@ -181,28 +183,6 @@ namespace Custom.Story
             return temp;
         }
 
-        public static List<Type> GetMethodParemterTypes(Type pMethod)
-        {
-            List<Type> temp = new List<Type>();
-
-            foreach (MethodInfo item in pMethod.GetMethods(BindingFlags.Static | BindingFlags.Public))
-            {
-                foreach (var itemm in item.GetParameters())
-                {
-
-                    // itemm.ParameterType.//,0
-                    object nigga = Activator.CreateInstance(Type.GetType(itemm.ParameterType.FullName));
-
-                    Debug.Log(item.Name + ":" + nigga);
-                    //tempa += itemm + ",";
-                }
-
-
-                //  Debug.Log(item + " : " + tempa);
-            }
-            return temp;
-        }
-
         public static MethodInfo GetMethod(string name)
         {
             foreach (MethodInfo item in GetAllMethods())
@@ -217,19 +197,18 @@ namespace Custom.Story
 
         public static List<MethodInfo> GetAllMethods()
         {
-            if (_AllMethods == null)
-            {
-                List<MethodInfo> AllMethods = new List<MethodInfo>();
 
-                foreach (Type classType in StoryEventManager.EventExecutionMethods)
+            List<MethodInfo> AllMethods = new List<MethodInfo>();
+
+            foreach (Type classType in StoryEventManager.EventExecutionMethods)
+            {
+                foreach (MethodInfo items in classType.GetMethods(BindingFlags.Static | BindingFlags.Public))
                 {
-                    foreach (MethodInfo items in classType.GetMethods(BindingFlags.Static | BindingFlags.Public))
-                    {
-                        AllMethods.Add(items);
-                    }
+                    AllMethods.Add(items);
                 }
-                _AllMethods = AllMethods;
             }
+            _AllMethods = AllMethods;
+
 
             return _AllMethods;
         }
@@ -371,22 +350,49 @@ namespace Custom.Story
             }
         }
     }
+    #endregion
 
     public class StoryEventManager
     {
-        static readonly List<Type> _triggerTypes = new List<Type>() { typeof(PlayerController), typeof(ObjectBase) };
-        static readonly List<Type> _EventExecutionMehtods = new List<Type>() { typeof(PlayerHandler), typeof(RepeatableEvents) };
         static List<Type> _triggerTypesWithChildClasses;
         static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
         List<string> _completedStoryEvents = new List<string>();
 
+        EditorConfig _config;
+
         static StoryEventManager instance;
+
         Queue<StoryContainer> _storyEventQue = new Queue<StoryContainer>();
 
-        public static List<Type> EventExecutionMethods => _EventExecutionMehtods;
+        public static List<Type> EventExecutionMethods
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    return ((EditorConfig) Resources.Load("EditorConfig")).EventExecutionMethods;
+                }
+
+                return instance._config.EventExecutionMethods;
+            }
+        }
+
+        public static List<Type> TriggerTypes
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    return ((EditorConfig) Resources.Load("EditorConfig")).TriggerTypes;
+                }
+
+                return instance._config.TriggerTypes;
+            }
+        }
 
         public StoryEventManager()
         {
+            _config = (EditorConfig) Resources.Load("EditorConfig");
             instance = this;
         }
 
@@ -425,15 +431,15 @@ namespace Custom.Story
         {
             List<string> temp = new List<string>();
 
-            foreach (var triggerType in _triggerTypes)
+            foreach (var triggerType in TriggerTypes)
             {
-                foreach (var item in GetChildStringList(triggerType))
+                List<string> _tempStringList = GetChildStringList(triggerType, triggerType.Name);
+
+                foreach (var item in _tempStringList)
                 {
                     temp.Add(item);
                 }
 
-                
-                
             }
 
             return temp;
@@ -443,25 +449,26 @@ namespace Custom.Story
         {
             List<string> temp = new List<string>();
 
-            foreach(Type childClass in GetChildClasses(pCType, true))
-            {
-                if(AppendString == "")
-                {
-                    AppendString = childClass.Name;
-                }
-                else
-                {
-                    AppendString += "/" + childClass.Name;
-                }
+            Type[] tempTypeArray = GetChildClasses(pCType, true);
 
-                temp.Add(AppendString);
-                
-                foreach (string item in GetChildStringList(pCType,AppendString))
+            if (tempTypeArray.Length > 0)
+            {
+                temp.Add(AppendString + "/All");
+
+                foreach (Type childClass in tempTypeArray)
                 {
-                    temp.Add(item);
+                    List<string> _childStringList = GetChildStringList(childClass, childClass.Name);
+
+                    foreach (string item in _childStringList)
+                    {
+                        temp.Add(AppendString + "/" + item);
+                    }
                 }
             }
-
+            else
+            {
+                temp.Add(pCType.Name);
+            }
             return temp;
         }
 
@@ -473,18 +480,19 @@ namespace Custom.Story
             }
             if (pDirectChildOnly)
             {
-                return _triggerTypesWithChildClasses.Where(t => t.IsSubclassOf(pT)).ToArray();
+                return _triggerTypesWithChildClasses.Where(t => t.BaseType == pT).ToArray();
             }
             else
             {
-                return _triggerTypesWithChildClasses.Where(t => t.BaseType == pT).ToArray();
+                return _triggerTypesWithChildClasses.Where(t => t.IsSubclassOf(pT)).ToArray();
+
             }
         }
 
         static void CreateTriggerTypesWithChildClasses()
         {
             _triggerTypesWithChildClasses = new List<Type>();
-            foreach (var triggerType in _triggerTypes)
+            foreach (var triggerType in TriggerTypes)
             {
                 Type[] childClasses = Assembly.GetAssembly(triggerType).GetTypes().Where(t => t.IsSubclassOf(triggerType)).ToArray();
 
@@ -507,28 +515,28 @@ namespace Custom.Story
             return _triggerTypesWithChildClasses[index].Name;
         }
 
-
         public static List<string> GetEventExecutionMethodsAsString()
         {
             List<string> temp = new List<string>();
-            for (int i = 0; i < _triggerTypes.Count; i++)
+            for (int i = 0; i < TriggerTypes.Count; i++)
             {
 
-                temp.Add(_EventExecutionMehtods[i].Name);
+                temp.Add(EventExecutionMethods[i].Name);
             }
 
             return temp;
         }
+
         public static string GetEventExecutionMethodAsString(int index)
         {
-            return _EventExecutionMehtods[index].ToString();
+            return EventExecutionMethods[index].ToString();
         }
-
 
         public static void QueStoryEvents(List<StoryContainer> newEvents, string EventName)
         {
 
             instance.FinishStoryEvent(EventName);
+
             if (newEvents.Count <= 0)
             {
                 Debug.LogWarning("new event que is empty");
@@ -537,7 +545,11 @@ namespace Custom.Story
 
             if (instance._storyEventQue.Count > 0)
             {
-                instance._storyEventQue.Clear();
+                do
+                {
+                    instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+                }
+                while (instance._storyEventQue.Count > 0);
             }
 
             foreach (StoryContainer pStoryEvent in newEvents)
