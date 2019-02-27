@@ -15,9 +15,11 @@ public class PlayerHandler
         Player.transform.position = pos;
     }
 
-    public static void MovePlayerWithGameObject(GameObject obj)
+    public static void SetPlayerTransform(GameObject obj)
     {
         Player.transform.position = obj.transform.position;
+        Player.transform.rotation = obj.transform.rotation;
+        Player._rb.rotation = obj.transform.rotation;
     }
 
     public static void SetPlayerEnabled(bool Enabled)

@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, HideInInspector]
     Camera _cam;
     [SerializeField, HideInInspector]
-    Rigidbody _rb;
+    public Rigidbody _rb;
     [SerializeField, HideInInspector]
     CapsuleCollider _capsuleCollider;
 
