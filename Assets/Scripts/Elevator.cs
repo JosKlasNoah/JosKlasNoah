@@ -11,6 +11,9 @@ public class Elevator : MonoBehaviour
     [SerializeField] Vector3 endPos = new Vector3(0,20, 0);
     [SerializeField] private float speed = 1;
 
+    private bool startTimer = false;
+    private float timer = 5;
+
     private void Start()
     {
         startPos = transform.localPosition;  
@@ -24,6 +27,17 @@ public class Elevator : MonoBehaviour
 
     private void Update()
     {
+        if (transform.localPosition.y == 47)
+        {
+            timer -= Time.deltaTime;
+        }
+
+        if(timer <= 0)
+        {
+            up *= -1;
+            timer = 5;
+        }
+
         t += Time.deltaTime * up * speed;
         Mathf.Clamp(t, 0, 1);
        MoveElevator();
