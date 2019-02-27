@@ -1,6 +1,11 @@
 ﻿using Custom.GameManager;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+using Custom.Story;
+
+
 public interface IInteractable
 {
     void OnItemInteract(PlayerController owningPlayer);
@@ -14,38 +19,16 @@ public class PlayerController : MonoBehaviour
 {
     #region vars
     //lenght of the raycast from player feet
-    const float groundDistanceAllowed = .05f;
+    const float groundDistanceAllowed = .1f;
 
-    [Header("Movement")]
     [SerializeField]
-    float _moveSpeed = 2;
-    [SerializeField, Range(0, 1)]
-    float _sprintSpeed = .2f;
-    [SerializeField, Range(0, 1)]
-    float _crouchSpeed = .8f;
-    [SerializeField, Range(0, 1)]
-    float _airSpeed = .1f;
+    public PlayerScriptableObject PlayerDataSO;
 
-    [SerializeField, Header("Jumping")]
-    float _jumpHeight = 5;
-    [SerializeField]
-    int _maxJumpCount = 1;
-    [SerializeField]
-    float _jumpDelay = 0f;
+    [HideInInspector]
+    public PlayerData _playerData;
 
-    [SerializeField, Header("Height")]
-    float _normalHeight = 2.2f;
-    [SerializeField]
-    float _crouchHeight = 1.5f;
-
-    [SerializeField, Header("ObjectInteraction")]
-    float _objectInteractionDistance = 2.2f;
     public IInteractable holdingObject = null;
     IInteractable hitObjectInterface = null; // object we are currently overlapping with
-
-    [SerializeField, Header("Debug")]
-    bool _debugRays = false;
-
 
     Vector3 _moveInput = new Vector3();
     bool _isOnGround;
@@ -57,7 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, HideInInspector]
     Camera _cam;
     [SerializeField, HideInInspector]
-    Rigidbody _rb;
+    public Rigidbody _rb;
     [SerializeField, HideInInspector]
     CapsuleCollider _capsuleCollider;
 
@@ -72,7 +55,7 @@ public class PlayerController : MonoBehaviour
     bool _shouldStopCrouching = true;
     #endregion
 
-    public int JumpCount { get { return _maxJumpCount; } set { _maxJumpCount = value; } }
+    public int JumpCount { get { return _playerData._maxJumpCount; } set { _playerData._maxJumpCount = value; } }
     public Camera Cam { get { return _cam; } set { _cam = value; } }
 
     #region Editor
@@ -104,15 +87,27 @@ public class PlayerController : MonoBehaviour
             _cam = camObj.AddComponent<Camera>();
             camObj.AddComponent<AudioListener>();
         }
-        ChangeHeight(_normalHeight);
-
         _cam.gameObject.tag = "MainCamera";
+        _cam.clearFlags = CameraClearFlags.SolidColor;
         _cam.backgroundColor = Color.black;
+
+        PlayerDataSO = (PlayerScriptableObject)Resources.Load("PlayerConfig");
+
+        ChangeHeight(PlayerDataSO._playerData._normalHeight);
     }
     #endregion
 
     private void Awake()
     {
+        if (PlayerDataSO != null)
+        {
+            _playerData = PlayerDataSO._playerData;
+        }
+        else
+        {
+            _playerData = new PlayerData();
+        }
+
         Application.targetFrameRate = -1;
 
         if (_capsuleCollider == null)
@@ -138,12 +133,12 @@ public class PlayerController : MonoBehaviour
     {
         #region Movement
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && _playerData._canJump)
         {
             _jumpKeyPressed = true;
         }
 
-        _moveInput = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
+        _moveInput = _playerData._canMove ? transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical") : Vector3.zero;
         #endregion
 
         #region LookAround
@@ -155,30 +150,23 @@ public class PlayerController : MonoBehaviour
 
         #endregion
 
-        if (Input.GetButtonDown("Crouch"))
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F1))
+            StoryEventManager.FinishQue();
+#endif
+
+        if (Input.GetButton("Crouch") && _playerData._canCrouch)
         {
-            ChangeHeight(_crouchHeight);
+            ChangeHeight(_playerData._crouchHeight);
             _shouldStopCrouching = false;
         }
-
-        if (IsCrouching())
+        else if (IsCrouching())
         {
-            if (Input.GetButtonUp("Crouch"))
+            if (CanStopCrouching())
             {
-                if (CanStopCrouching())
-                {
-                    ChangeHeight(_normalHeight);
-                }
-
-                _shouldStopCrouching = true;
+                ChangeHeight(_playerData._normalHeight);
             }
-            else if (_shouldStopCrouching)
-            {
-                if (CanStopCrouching())
-                {
-                    ChangeHeight(_normalHeight);
-                }
-            }
+            _shouldStopCrouching = true;
         }
 
         OnObjectInteraction();
@@ -190,13 +178,20 @@ public class PlayerController : MonoBehaviour
         _isOnGround = IsGrounded();
         _currentGroundVelocity = !_isOnGround ? _currentGroundVelocity : GetGroundMovingSpeed();
 
-        #region Movement
+#region Movement
         if (_jumpKeyPressed)
         {
-            _jumpKeyPressed = false;
-            Jump();
-            Debug.Log("jump key detected");
-            _currentGroundVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+            if (_isOnGround || CanJump())
+            {
+                _jumpKeyPressed = false;
+                Jump();
+                Debug.Log("jump key detected");
+                _currentGroundVelocity = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+            }
+            else
+            {
+                _jumpKeyPressed = false;
+            }
         }
 
 
@@ -212,16 +207,16 @@ public class PlayerController : MonoBehaviour
 
         _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity * Time.fixedDeltaTime);
 
-        #endregion
+#endregion
 
         _rb.transform.rotation = Quaternion.Euler(0, _mouseInput.x, 0);
         _cam.transform.localRotation = Quaternion.Euler(_mouseInput.y, 0, 0);
     }
 
-    #region Movement
+#region Movement
     void Jump()
     {
-        if (_debugRays)
+        if (_playerData._debugRays)
         {
             DrawJumpRay();
         }
@@ -231,8 +226,8 @@ public class PlayerController : MonoBehaviour
         {
             _currentJumpCount = 0;
         }
-        //als we niet op de grond zijn , als we niet nog een keer mogen springen
-        else if (_currentJumpCount >= _maxJumpCount || Time.time < _jumpDelay)
+        //als we 
+        else if (!CanJump())
         {
             return;
         }
@@ -243,9 +238,14 @@ public class PlayerController : MonoBehaviour
             Debug.Log(_rb.velocity);
         }
 
-        _rb.AddForce(Vector3.up * _jumpHeight, ForceMode.Impulse);
-        _currentJumpDelay = Time.time + _jumpDelay;
+        _rb.AddForce(Vector3.up * _playerData._jumpHeight, ForceMode.Impulse);
+        _currentJumpDelay = Time.time + _playerData._jumpDelay;
         _currentJumpCount++;
+    }
+
+    bool CanJump()
+    { //als we niet op de grond zijn , als we niet nog een keer mogen springen
+        return !(_currentJumpCount >= _playerData._maxJumpCount && Time.time > _playerData._jumpDelay);
     }
 
     Vector3 GetGroundMovingSpeed()
@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        if (_debugRays)
+        if (_playerData._debugRays)
         {
             DrawJumpRay();
         }
@@ -306,26 +306,26 @@ public class PlayerController : MonoBehaviour
 
     bool CanStopCrouching()
     {
-        return !Physics.Raycast(transform.position + Vector3.up * (_capsuleCollider.bounds.extents.y * .95f), Vector3.up, _normalHeight - _crouchHeight);
+        return !Physics.Raycast(transform.position + Vector3.up * (_capsuleCollider.bounds.extents.y * .95f), Vector3.up, _playerData._normalHeight - _playerData._crouchHeight);
     }
 
     float MinMaxMoveSpeed()
     {
         if (!IsGrounded())
         {
-            return _moveSpeed * (_airSpeed * 100);
+            return _playerData._moveSpeed * (_playerData._airSpeed * 100);
         }
         else if (IsCrouching())
         {
-            return _moveSpeed * (_crouchSpeed * 100);
+            return _playerData._moveSpeed * (_playerData._crouchSpeed * 100);
         }
-        else if (Input.GetButton("Sprint"))
+        else if (Input.GetButton("Sprint") && _playerData._canRun)
         {
-            return _moveSpeed * ((_sprintSpeed + 1) * 100);
+            return _playerData._moveSpeed * ((_playerData._sprintSpeed + 1) * 100);
         }
 
 
-        return _moveSpeed * 100;
+        return _playerData._moveSpeed * 100;
     }
 
     void ChangeHeight(float newHeight)
@@ -338,10 +338,10 @@ public class PlayerController : MonoBehaviour
 
     bool IsCrouching()
     {
-        return _capsuleCollider.height == _crouchHeight;
+        return _capsuleCollider.height == _playerData._crouchHeight;
     }
 
-    #endregion
+#endregion
     void OnObjectInteraction()
     {
         RayCheck();
@@ -373,7 +373,7 @@ public class PlayerController : MonoBehaviour
 
     void RayCheck()
     {
-        if (_debugRays)
+        if (_playerData._debugRays)
         {
             //visible line in editor
             Debug.DrawRay(_cam.gameObject.transform.position, _cam.gameObject.transform.forward * 2f, Color.green, 5);
@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
         //shoot a ray forward , and only check the layers specified in the editor
         //IF we hit something
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _objectInteractionDistance))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _playerData._objectInteractionDistance))
         {
             //If the hit object has a rigidbody
             if (hit.rigidbody != null)

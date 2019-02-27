@@ -13,7 +13,8 @@ namespace Custom.Story
     public enum TriggerType
     {
         Awake,
-        Trigger
+        TriggerEnter,
+        TriggerExit
     }
 
     [Serializable]
@@ -312,16 +313,16 @@ namespace Custom.Story
             switch (valueType)
             {
                 case valueType.Int:
-                    _int = (int) pValue;
+                    _int = (int)pValue;
                     break;
                 case valueType.Float:
-                    _float = (float) pValue;
+                    _float = (float)pValue;
                     break;
                 case valueType.Bool:
-                    _bool = (bool) pValue;
+                    _bool = (bool)pValue;
                     break;
                 case valueType.UnityObject:
-                    _unityObject = (UnityEngine.Object) pValue;
+                    _unityObject = (UnityEngine.Object)pValue;
                     break;
                 default:
                     Debug.LogWarning("not implemented type");
@@ -355,7 +356,7 @@ namespace Custom.Story
     public class StoryEventManager
     {
         static List<Type> _triggerTypesWithChildClasses;
-        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.Trigger };
+        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.TriggerEnter, TriggerType.TriggerExit };
         List<string> _completedStoryEvents = new List<string>();
 
         EditorConfig _config;
@@ -370,7 +371,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig) Resources.Load("EditorConfig")).EventExecutionMethods;
+                    return ((EditorConfig)Resources.Load("EditorConfig")).EventExecutionMethods;
                 }
 
                 return instance._config.EventExecutionMethods;
@@ -383,7 +384,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig) Resources.Load("EditorConfig")).TriggerTypes;
+                    return ((EditorConfig)Resources.Load("EditorConfig")).TriggerTypes;
                 }
 
                 return instance._config.TriggerTypes;
@@ -392,7 +393,7 @@ namespace Custom.Story
 
         public StoryEventManager()
         {
-            _config = (EditorConfig) Resources.Load("EditorConfig");
+            _config = (EditorConfig)Resources.Load("EditorConfig");
             instance = this;
         }
 
@@ -402,6 +403,17 @@ namespace Custom.Story
             {
                 _completedStoryEvents.Add(name);
             }
+        }
+
+        public static void FinishQue()
+        {
+            do
+            {
+                instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+            }
+            while (instance._storyEventQue.Count > 0);
+
+            GameManager.PauseAudio();
         }
 
         public static bool HasStoryEventCompleted(string name)
@@ -562,9 +574,12 @@ namespace Custom.Story
 
         public static void OnAudioFinished()
         {
-            instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+            if (instance._storyEventQue.Count > 0)
+            {
+                instance._storyEventQue.Dequeue().OnStoryPlayFinished();
 
-            PlayNext();
+                PlayNext();
+            }
         }
 
         static void PlayNext()
