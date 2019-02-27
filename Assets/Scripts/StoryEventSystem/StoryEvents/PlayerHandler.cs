@@ -15,6 +15,11 @@ public class PlayerHandler
         Player.transform.position = pos;
     }
 
+    public static void MovePlayerWithGameObject(GameObject obj)
+    {
+        Player.transform.position = obj.transform.position;
+    }
+
     public static void SetPlayerEnabled(bool Enabled)
     {
         Player.enabled = Enabled;

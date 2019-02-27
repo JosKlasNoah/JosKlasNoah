@@ -1,6 +1,11 @@
 ﻿using Custom.GameManager;
 using System.Collections.Generic;
 using UnityEngine;
+
+
+using Custom.Story;
+
+
 public interface IInteractable
 {
     void OnItemInteract(PlayerController owningPlayer);
@@ -17,7 +22,7 @@ public class PlayerController : MonoBehaviour
     const float groundDistanceAllowed = .1f;
 
     [SerializeField]
-    PlayerScriptableObject PlayerDataSO;
+    public PlayerScriptableObject PlayerDataSO;
 
     [HideInInspector]
     public PlayerData _playerData;
@@ -86,7 +91,7 @@ public class PlayerController : MonoBehaviour
         _cam.clearFlags = CameraClearFlags.SolidColor;
         _cam.backgroundColor = Color.black;
 
-        PlayerDataSO = (PlayerScriptableObject) Resources.Load("PlayerConfig");
+        PlayerDataSO = (PlayerScriptableObject)Resources.Load("PlayerConfig");
 
         ChangeHeight(PlayerDataSO._playerData._normalHeight);
     }
@@ -97,12 +102,6 @@ public class PlayerController : MonoBehaviour
         if (PlayerDataSO != null)
         {
             _playerData = PlayerDataSO._playerData;
-
-#if UNITY_EDITOR
-
-            GameManager.MouseVelocity = PlayerDataSO.mouseSpeed;
-#endif
-
         }
         else
         {
@@ -151,6 +150,11 @@ public class PlayerController : MonoBehaviour
 
         #endregion
 
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F1))
+            StoryEventManager.FinishQue();
+#endif
+
         if (Input.GetButton("Crouch") && _playerData._canCrouch)
         {
             ChangeHeight(_playerData._crouchHeight);
@@ -174,7 +178,7 @@ public class PlayerController : MonoBehaviour
         _isOnGround = IsGrounded();
         _currentGroundVelocity = !_isOnGround ? _currentGroundVelocity : GetGroundMovingSpeed();
 
-        #region Movement
+#region Movement
         if (_jumpKeyPressed)
         {
             if (_isOnGround || CanJump())
@@ -203,13 +207,13 @@ public class PlayerController : MonoBehaviour
 
         _rb.velocity = _moveInput + _currentGroundVelocity + (Physics.gravity * Time.fixedDeltaTime);
 
-        #endregion
+#endregion
 
         _rb.transform.rotation = Quaternion.Euler(0, _mouseInput.x, 0);
         _cam.transform.localRotation = Quaternion.Euler(_mouseInput.y, 0, 0);
     }
 
-    #region Movement
+#region Movement
     void Jump()
     {
         if (_playerData._debugRays)
@@ -337,7 +341,7 @@ public class PlayerController : MonoBehaviour
         return _capsuleCollider.height == _playerData._crouchHeight;
     }
 
-    #endregion
+#endregion
     void OnObjectInteraction()
     {
         RayCheck();
