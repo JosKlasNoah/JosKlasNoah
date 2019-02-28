@@ -1,8 +1,29 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 52f4c380c0d370c1d99245f7277d1a7fae0e6abf
 guid: ce67aa87f613246dda63a54a59c6399e
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+guid: 3f353fe875cc3b544919192922d8a2f4
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+=======
+guid: ce67aa87f613246dda63a54a59c6399e
+folderAsset: yes
+timeCreated: 1477656493
+licenseType: Pro
+DefaultImporter:
+>>>>>>> develop
+>>>>>>> feature/Models_Job
+>>>>>>> 52f4c380c0d370c1d99245f7277d1a7fae0e6abf
   userData: 
   assetBundleName: 
   assetBundleVariant: 
