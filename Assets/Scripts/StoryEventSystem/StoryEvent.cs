@@ -23,7 +23,7 @@ public class StoryEvent : MonoBehaviour, IInteractable
 
     private void OnValidate()
     {
-        
+
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -61,8 +61,6 @@ public class StoryEvent : MonoBehaviour, IInteractable
 
                 }
             }
-            gameObject.layer = 0;
-
         }
         else
         {
@@ -73,23 +71,34 @@ public class StoryEvent : MonoBehaviour, IInteractable
                     StartCoroutine(FixColiderStatus(false));
                 }
             }
+        }
 
+        if (!GetComponent<Rigidbody>() || GetComponent<Collider>())
+        {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+        else
+        {
+            gameObject.layer = 0;
         }
     }
     //we are not allowed to destroy the component in OnValidate. This is the workaround (wait till the end of the frame)
-    IEnumerator FixColiderStatus( bool addCollider, bool trigger = true ) {
+    IEnumerator FixColiderStatus(bool addCollider, bool trigger = true)
+    {
         yield return new EditorWaitForSeconds(.05f);
 
-        if (addCollider) {
-            if (_collider == null) {
+        if (addCollider)
+        {
+            if (_collider == null)
+            {
                 gameObject.AddComponent<BoxCollider>();
                 _collider = GetComponent<BoxCollider>();
 
                 _collider.isTrigger = trigger;
             }
         }
-        else {
+        else
+        {
 
             DestroyImmediate(_collider);
         }
@@ -144,7 +153,8 @@ public class StoryEvent : MonoBehaviour, IInteractable
         }
     }
 
-    public void OnItemInteract(PlayerController owningPlayer) {
+    public void OnItemInteract(PlayerController owningPlayer)
+    {
         Debug.Log("interact");
 
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
@@ -160,11 +170,13 @@ public class StoryEvent : MonoBehaviour, IInteractable
         }
     }
 
-    public void OnItemRightMouseButton(PlayerController owningPlayer) {
+    public void OnItemRightMouseButton(PlayerController owningPlayer)
+    {
         throw new System.NotImplementedException();
     }
 
-    public void UpdateObjectOffset(float newPosistion) {
+    public void UpdateObjectOffset(float newPosistion)
+    {
         throw new System.NotImplementedException();
     }
 
