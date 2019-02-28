@@ -8,7 +8,7 @@ public class Disintigrate : MonoBehaviour
     
     private void OnDestroy()
     {
-        ParticleSystem _particles = Instantiate(_particlePrefab);
+        ParticleSystem _particles = Instantiate(_particlePrefab,transform);
         _particles.Play();
     }
 }
