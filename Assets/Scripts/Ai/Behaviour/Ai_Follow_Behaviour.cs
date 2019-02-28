@@ -37,10 +37,10 @@ public class Ai_Follow_Behaviour : StateMachineBehaviour
 
             if (CheckInTargetAttackRange)
             {
-                if ((agent.destination -agent.transform.position).magnitude <= aiConctroller.AttackRange)
+                if ( ( agent.destination -agent.transform.position ).magnitude <= aiConctroller.AttackRange )
                 {
-                    Debug.Log("inrange");
-                    animator.SetTrigger("InAttackRange");
+                    Debug.Log( "inrange" );
+                    animator.SetBool( "InAttackRange", true );
                 }
             }
 

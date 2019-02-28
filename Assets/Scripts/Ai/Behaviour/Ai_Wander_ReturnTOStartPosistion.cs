@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
 
-public class ai_Wander_ReturnTOStartPosistion : StateMachineBehaviour
+public class Ai_Wander_ReturnTOStartPosistion : StateMachineBehaviour
 {
     NavMeshAgent agent;
     AiController aiController;

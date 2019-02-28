@@ -6,31 +6,37 @@ using UnityEngine;
 public class AiController : MonoBehaviour {
 
     [SerializeField]
-    private float _minIdleTime = 2f;
+    private float _minIdleTime = 2;
 
     [SerializeField]
-    private float _maxIdleTime = 10f;
+    private float _maxIdleTime = 10;
 
     [SerializeField]
-    private float _randomWanderDistance = 50f;
-
-    [SerializeField, Range(0, 10)]
-    private float _eyeSight = 45f;
+    private float _randomWanderDistance = 50;
 
     [SerializeField]
-    private float _eyeHeight = 10f;
+    private float _loseTargetDistance = 26;
 
     [SerializeField]
-    private float _lookDepth = 20f;
+    private Vector2 _eyeSight = new Vector2( 1, 1 );
+
+    [SerializeField]
+    private Vector2 _rays = new Vector2( 6, 6 );
+
+    [SerializeField]
+    private float _eyeHeight = 10;
+
+    [SerializeField]
+    private float _lookDepth = 20;
 
     [SerializeField, Range(0,360)]
-    private float _lookRotation = 45f;
+    private float _lookRotation = 45;
 
     [SerializeField, Range(0,3)]
-    private float _lookRotationSpeed = 1f;
+    private float _lookRotationSpeed = 1;
 
     [SerializeField]
-    private float _attackRange = 15f;
+    private float _attackRange = 19;
 
     private PlayerController _target;
     private Vector3 _lastKnownTargetLocation;
@@ -42,9 +48,13 @@ public class AiController : MonoBehaviour {
 
     public float RandomWanderDistance => _randomWanderDistance;
 
+    public float LoseTargetDistance => _loseTargetDistance;
+
     public float EyeHeight => _eyeHeight;
 
-    public float EyeSight => _eyeSight;
+    public Vector2 EyeSight => _eyeSight;
+
+    public Vector2 Rays => _rays;
 
     public float LookDepth => _lookDepth;
 
