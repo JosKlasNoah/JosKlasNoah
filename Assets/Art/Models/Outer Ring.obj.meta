@@ -1,61 +1,16 @@
 fileFormatVersion: 2
-guid: 16f14fe3fbdcbee44829deb97a73b71b
+guid: ad3689e7fad3e6047a916f8a6aaafcb0
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Cube
-    100002: Cube__1_
-    100004: Cube__2_
-    100006: Cube__3_
-    100008: Cube__4_
-    100010: Cube__5_
-    100012: Cube__6_
-    100014: Cube__7_
-    100016: Cube__8_
-    100018: Cube__9_
-    100020: //RootNode
-    400000: Cube
-    400002: Cube__1_
-    400004: Cube__2_
-    400006: Cube__3_
-    400008: Cube__4_
-    400010: Cube__5_
-    400012: Cube__6_
-    400014: Cube__7_
-    400016: Cube__8_
-    400018: Cube__9_
-    400020: //RootNode
-    2100000: Default_Material
-    2300000: Cube
-    2300002: Cube__1_
-    2300004: Cube__2_
-    2300006: Cube__3_
-    2300008: Cube__4_
-    2300010: Cube__5_
-    2300012: Cube__6_
-    2300014: Cube__7_
-    2300016: Cube__8_
-    2300018: Cube__9_
-    3300000: Cube
-    3300002: Cube__1_
-    3300004: Cube__2_
-    3300006: Cube__3_
-    3300008: Cube__4_
-    3300010: Cube__5_
-    3300012: Cube__6_
-    3300014: Cube__7_
-    3300016: Cube__8_
-    3300018: Cube__9_
-    4300000: Cube
-    4300002: Cube__1_
-    4300004: Cube__2_
-    4300006: Cube__3_
-    4300008: Cube__4_
-    4300010: Cube__5_
-    4300012: Cube__6_
-    4300014: Cube__7_
-    4300016: Cube__8_
-    4300018: Cube__9_
+    100000: pCylinder4
+    100002: //RootNode
+    400000: pCylinder4
+    400002: //RootNode
+    2100000: pCylinder4Mat
+    2300000: pCylinder4
+    3300000: pCylinder4
+    4300000: pCylinder4
   externalObjects: {}
   materials:
     importMaterials: 1
