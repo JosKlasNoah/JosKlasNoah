@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "configFile")]
+[CreateAssetMenu(fileName = "Custom /configFile")]
 public class EditorConfig : ScriptableObject
 {
     [SerializeField]

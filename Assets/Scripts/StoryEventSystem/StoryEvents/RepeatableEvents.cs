@@ -4,19 +4,33 @@ using UnityEngine.SceneManagement;
 public class RepeatableEvents
 {
 
-    public static void Remove(GameObject removeWhat)
+    public static void SetObjectActive(GameObject obj, bool Active)
     {
-        removeWhat.SetActive(false);
+        obj.SetActive(Active);
     }
 
-    public static void Activate(GameObject activateWhat)
+    public static void MoveObject(GameObject obj, Vector3 targetPos)
     {
-        activateWhat.SetActive(true);
+        obj.transform.position = targetPos;
     }
 
-    public static void MoveSomething(GameObject what, Vector3 where)
+    public static void RotateObject(GameObject obj, Vector3 rotation)
     {
-        what.transform.position = where;
+        obj.transform.rotation = Quaternion.Euler(rotation);
+    }
+
+    public static void OpenDoor(GameObject obj,bool open)
+    {
+        Door door = obj.GetComponent<Door>();
+        if(door != null)
+        {
+            door.OpenDoor(open);
+
+        }
+        else
+        {
+            Debug.LogWarning(obj + " is not a door");
+        }
     }
 
     public static void OpenScene(string name)
@@ -29,7 +43,7 @@ public class RepeatableEvents
         SceneManager.UnloadSceneAsync(name);
     }
 
-    public static void End()
+    public static void ExitGame()
     {
         Application.Quit();
     }
