@@ -1,16 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Custom.GameManager;
 
-public class CannonEvents
-{
-    public static void Load( GameObject obj ) {
+public class CannonEvents {
+    public static void LoadCannon( GameObject obj )
+    {
         Debug.Log( "Loading..." );
-        obj.GetComponent<Cannon>();
-    }
+        PlayerController playerController = GameManager.CurrentPlayerController;
+        GameObject holdingObject = playerController.holdingObject.GetGameObject();
 
-    private static void Fire() {
-        Debug.Log( "Fire!" );
+        playerController.holdingObject.OnItemInteract( playerController );
+        holdingObject.SetActive( false );
 
+        obj.GetComponent<Cannon>().Load( holdingObject );
     }
 }

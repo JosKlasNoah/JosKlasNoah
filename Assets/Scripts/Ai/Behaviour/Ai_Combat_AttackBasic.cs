@@ -68,7 +68,6 @@ public class Ai_Combat_AttackBasic : StateMachineBehaviour
 
     private void AttackUsing( WizardAI wizardAI ) {
         _t -= Time.deltaTime;
-        Debug.Log( _t );
         if ( _t <= 0 ) {
             _t = _cooldown;
 

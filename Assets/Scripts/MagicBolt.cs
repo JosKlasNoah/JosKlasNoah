@@ -13,6 +13,7 @@ public class MagicBolt : MonoBehaviour
 
     private ParticleSystem[] _particleSystem;
     private Transform _transformToFollow;
+    private Transform _checkPoint;
     private Rigidbody _rigidBody;
     private Transform _meshObject;
     private Transform _effectObject;
@@ -28,13 +29,20 @@ public class MagicBolt : MonoBehaviour
         }
     }
 
+    public Transform CheckPoint {
+        get => _checkPoint;
+        set {
+            _checkPoint = value;
+        }
+    }
+
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
         _trigger = GetComponents<SphereCollider>()[1];
-        Debug.AssertFormat( null != _rigidBody, "No RigidBody on the object" );
-        Debug.AssertFormat( null != _trigger || ( null != _trigger && !_trigger.isTrigger ), "No trigger Collider on the object" );
+        Debug.AssertFormat( _rigidBody, "No RigidBody on the object" );
+        Debug.AssertFormat( _trigger || ( _trigger && !_trigger.isTrigger ), "No trigger Collider on the object" );
 
         _rigidBody.velocity = ( ( _transformToFollow.position + new Vector3( 0, _transformToFollow.localScale.y * 0.75f, 0 ) ) - transform.position ).normalized * _speed;
 
@@ -56,31 +64,31 @@ public class MagicBolt : MonoBehaviour
 
     private void OnCollisionEnter( Collision other )
     {
+        if ( other.gameObject.GetComponent<PlayerController>() ) {
+            PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            playerController.ResetPlayer(_checkPoint);
+        }
         _rigidBody.velocity = Vector3.zero;
         _trigger.enabled = false;
 
-        for ( int i = 0; i < _particleSystemCount; i++ )
-        {
-            if ( null != _particleSystem[ i ] )
-            {
-                if ( i == 0 )
-                {
+        for ( int i = 0; i < _particleSystemCount; i++ ) {
+            if ( _particleSystem[ i ] ) {
+                if ( i == 0 ) {
                     // glow
                     Destroy(_particleSystem[ i ].gameObject);
                 }
-                else
-                {
+                else {
                     // lightning, sparks, and anything else
                     _particleSystem[ i ].Stop();
                 }
             }
         }
 
-        if ( null != _meshObject )
+        if ( _meshObject )
             Destroy(_meshObject.gameObject);
-        if ( null != _effectObject )
+        if ( _effectObject )
             Destroy(_effectObject.gameObject, _effectTime);
-        if ( null != this.gameObject )
+        if ( this.gameObject )
             Destroy(this.gameObject, _effectTime);
     }
 }

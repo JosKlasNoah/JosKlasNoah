@@ -58,10 +58,10 @@ public class StoryEvent : MonoBehaviour
             }
         }
     }
-    //we are not allowed to destory the component in OnValidate this is the workaround (wait till the end of the frame
+    //we are not allowed to destroy the component in OnValidate. This is the workaround (wait till the end of the frame)
     IEnumerator FixColiderStatus(bool addCollider)
     {
-        yield return new EditorWaitForSeconds(.1f);
+        yield return new EditorWaitForSeconds(.05f);
 
         if (addCollider)
         {
@@ -124,6 +124,5 @@ public class StoryEvent : MonoBehaviour
                 }
         }
     }
-
 }
 
