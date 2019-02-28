@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 25fe287e7875af347ac56f0768468570
+guid: a852709b0fb7c6d4dac0ec19d40343a2
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,8 +8,13 @@ ModelImporter:
     2100000: No Name
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Platonic_1
-  externalObjects: {}
+    4300000: Cube
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 2a4bc9a0b95e85741acec293defd0e2b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -65,7 +70,7 @@ ModelImporter:
     hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
