@@ -148,6 +148,7 @@ namespace Custom.Story
             catch (Exception e)
             {
                 Debug.LogError(_functionName + " is a unkown function");
+                Debug.LogError(e);
             }
         }
 

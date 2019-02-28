@@ -45,7 +45,7 @@ public class Cannon : MonoBehaviour
 
     private void Fire() {
         Debug.Log( "Fire!" );
-        Transform aimObject = transform.GetChild( 3 );
+        Transform aimObject = transform.GetChild( 0 );
 
         _ammo.transform.position = aimObject.transform.position;
         _ammo.transform.rotation = aimObject.transform.rotation;
