@@ -95,8 +95,9 @@ namespace Custom.GameManager
 
         public static void StartGame()
         {
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
-            SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);  
+            SceneManager.LoadScene(1, LoadSceneMode.Single);
+            SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync(3, LoadSceneMode.Additive);
         }
 
         public static void PlayAudio(AudioClip PAudioClip)
