@@ -54,7 +54,7 @@ namespace Custom.Story
                 bool HasCompletedAll = true;
                 foreach (StoryEventNameContainer _storyName in _eventRequiredmentList)
                 {
-                    if (!_storyName._Completed && StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
+                    if (_storyName._Completed != StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
                     {
                         HasCompletedAll = false;
                         break;
@@ -407,6 +407,9 @@ namespace Custom.Story
 
         public static void FinishQue()
         {
+            if (instance._storyEventQue.Count <= 0)
+                return;
+
             do
             {
                 instance._storyEventQue.Dequeue().OnStoryPlayFinished();
