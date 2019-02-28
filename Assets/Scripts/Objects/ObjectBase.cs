@@ -4,12 +4,13 @@ using UnityEngine;
 using Custom.GameManager;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
-public class ObjectBase : MonoBehaviour, IInteractable
-{
+public class ObjectBase : MonoBehaviour, IInteractable {
     protected Rigidbody rb;
     protected Collider _collider;
 
     protected Bounds objBounds;
+
+    protected LayerMask itemLayer;
 
     protected virtual void Awake()
     {
@@ -21,7 +22,7 @@ public class ObjectBase : MonoBehaviour, IInteractable
     public virtual void OnItemInteract(PlayerController owningPlayer)
     {
         //als de speler geen object vast houdt
-        if (owningPlayer.holdingObject == null)
+        if ( owningPlayer.holdingObject == null )
         {
             //zet rigidbody collsion type
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
@@ -29,19 +30,21 @@ public class ObjectBase : MonoBehaviour, IInteractable
             rb.interpolation = RigidbodyInterpolation.None;
 
             //disable box collider
-            _collider.enabled = false;
+            //_collider.enabled = false;
+            gameObject.layer = 2;
 
             //zet de parrant van dit object naar de player camera
             gameObject.transform.SetParent(owningPlayer.Cam.transform);
             //holding object staat gelijk aan het IInteractable interface van dit object
             owningPlayer.holdingObject = GetComponent<IInteractable>();
         }
-        else if (transform.localPosition.z > GameManager.objectInteractDistance[0])
+        else if ( transform.localPosition.z > GameManager.objectInteractDistance[ 0 ] )
         {
             gameObject.transform.SetParent(null);
             owningPlayer.holdingObject = null;
 
-            _collider.enabled = true;
+            gameObject.layer = itemLayer;
+            //_collider.enabled = true;
             rb.isKinematic = false;
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
@@ -51,7 +54,7 @@ public class ObjectBase : MonoBehaviour, IInteractable
 
     public virtual void UpdateObjectOffset(float newPosistion)
     {
-        transform.localPosition = new Vector3(0, 0, Mathf.Clamp(newPosistion - objBounds.extents.z, GameManager.objectInteractDistance[0], GameManager.objectInteractDistance[1]));
+        transform.localPosition = new Vector3(0, 0, Mathf.Clamp(newPosistion - objBounds.extents.z, GameManager.objectInteractDistance[ 0 ], GameManager.objectInteractDistance[ 1 ]));
     }
 
     public virtual void OnItemRightMouseButton(PlayerController owningPlayer)
@@ -61,4 +64,8 @@ public class ObjectBase : MonoBehaviour, IInteractable
         rb.AddForce(owningPlayer.Cam.transform.forward * 2.5f, ForceMode.Impulse);
     }
 
+    public virtual GameObject GetGameObject()
+    {
+        return gameObject;
+    }
 }
