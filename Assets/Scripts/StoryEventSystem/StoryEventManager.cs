@@ -14,7 +14,8 @@ namespace Custom.Story
     {
         Awake,
         TriggerEnter,
-        TriggerExit
+        TriggerExit,
+        Interact
     }
 
     [Serializable]
@@ -40,15 +41,19 @@ namespace Custom.Story
                 return true;
             }
 
-            if (obj == null)
+            if (_storyEventTriggerType == TriggerType.TriggerEnter || _storyEventTriggerType == TriggerType.TriggerExit)
             {
-                return false;
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                if (obj.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) == null)
+                {
+                    return false;
+                }
             }
 
-            if (obj.GetComponent(StoryEventManager.GetTypeAsString(_interactionType)) == null)
-            {
-                return false;
-            }
 
             {
                 bool HasCompletedAll = true;
@@ -321,16 +326,16 @@ namespace Custom.Story
             switch (valueType)
             {
                 case valueType.Int:
-                    _int = (int)pValue;
+                    _int = (int) pValue;
                     break;
                 case valueType.Float:
-                    _float = (float)pValue;
+                    _float = (float) pValue;
                     break;
                 case valueType.Bool:
-                    _bool = (bool)pValue;
+                    _bool = (bool) pValue;
                     break;
                 case valueType.UnityObject:
-                    _unityObject = (UnityEngine.Object)pValue;
+                    _unityObject = (UnityEngine.Object) pValue;
                     break;
                 default:
                     Debug.LogWarning("not implemented type");
@@ -364,7 +369,7 @@ namespace Custom.Story
     public class StoryEventManager
     {
         static List<Type> _triggerTypesWithChildClasses;
-        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.TriggerEnter, TriggerType.TriggerExit };
+        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.TriggerEnter, TriggerType.TriggerExit, TriggerType.Interact };
         List<string> _completedStoryEvents = new List<string>();
 
         EditorConfig _config;
@@ -379,7 +384,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig)Resources.Load("EditorConfig")).EventExecutionMethods;
+                    return ((EditorConfig) Resources.Load("EditorConfig")).EventExecutionMethods;
                 }
 
                 return instance._config.EventExecutionMethods;
@@ -392,7 +397,7 @@ namespace Custom.Story
             {
                 if (instance == null)
                 {
-                    return ((EditorConfig)Resources.Load("EditorConfig")).TriggerTypes;
+                    return ((EditorConfig) Resources.Load("EditorConfig")).TriggerTypes;
                 }
 
                 return instance._config.TriggerTypes;
@@ -401,7 +406,7 @@ namespace Custom.Story
 
         public StoryEventManager()
         {
-            _config = (EditorConfig)Resources.Load("EditorConfig");
+            _config = (EditorConfig) Resources.Load("EditorConfig");
             instance = this;
         }
 
@@ -416,7 +421,9 @@ namespace Custom.Story
         public static void FinishQue()
         {
             if (instance._storyEventQue.Count <= 0)
+            {
                 return;
+            }
 
             do
             {

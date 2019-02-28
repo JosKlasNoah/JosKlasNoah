@@ -10,7 +10,8 @@ public class GameEventPropteryDrawer : PropertyDrawer
         {
             {TriggerType.Awake,30 },
             {TriggerType.TriggerEnter,180 },
-           {TriggerType.TriggerExit,180 }
+           {TriggerType.TriggerExit,180 },
+        {TriggerType.Interact, 140 }
         };
 
     string[] options = System.Enum.GetNames(typeof(TriggerType));
@@ -84,6 +85,13 @@ public class GameEventPropteryDrawer : PropertyDrawer
             case TriggerType.TriggerExit:
             case TriggerType.TriggerEnter:
                 DisplayTriggerPropertys(position, property, label);
+                NextLine(45);
+                DrawEventInfo(property);
+                NextLine(45);
+                break;
+
+            case TriggerType.Interact:
+                DisplayInteractPropertys(position, property, label);
                 NextLine(45);
                 DrawEventInfo(property);
                 NextLine(45);
@@ -194,14 +202,14 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     void DrawPropertyForCustomType(Rect trans, SerializedProperty objectWrapper)
     {
-        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType)objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
 
         EditorGUI.PropertyField(trans, objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueString[vt]), GUIContent.none);
     }
 
     object GetPropertyValueForCustomType(SerializedProperty objectWrapper)
     {
-        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType)objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
+        TypeObjectWrapper.valueType vt = (TypeObjectWrapper.valueType) objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex;
 
         // objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueObject[vt]);
         switch (vt)
@@ -230,7 +238,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
     void SetTypeObjectWrapperValue(SerializedProperty objectWrapper, System.Type pValueType)
     {
         TypeObjectWrapper.valueType vt = TypeObjectWrapper.getValueType(pValueType);
-        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int)vt;
+        objectWrapper.FindPropertyRelative("_currentValueType").enumValueIndex = (int) vt;
         //SerializedProperty prop = objectWrapper.FindPropertyRelative(TypeObjectWrapper._valueString[vt]);
 
         return;
@@ -260,13 +268,27 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     }
 
+    void DisplayInteractPropertys(Rect position, SerializedProperty property, GUIContent label)
+    {
+        NextLine(25);
+
+        EditorGUI.LabelField(CalculateRect(155, 50), new GUIContent("InteractionTriggerCount"));
+
+        NextLine(25);
+        EditorGUI.PrefixLabel(CalculateRect(30, 20), new GUIContent("Min:"));
+
+        EditorGUI.PropertyField(CalculateRect(50, 0), property.FindPropertyRelative("_interactionCountBeforePlay"), GUIContent.none);
+        EditorGUI.PrefixLabel(CalculateRect(30, 50), new GUIContent("Max:"));
+        EditorGUI.PropertyField(CalculateRect(50, 10), property.FindPropertyRelative("_maxInteractionCount"), GUIContent.none);
+    }
+
     void DisplayTriggerPropertys(Rect position, SerializedProperty property, GUIContent label)
     {
         NextLine(25);
         EditorGUI.PrefixLabel(CalculateRect(80, 15), new GUIContent("TriggerType:"));
 
         List<string> temp = StoryEventManager.GetTriggerTypes();
-        byte _oldStringIndex = (byte)property.FindPropertyRelative("_interactionType").intValue;
+        byte _oldStringIndex = (byte) property.FindPropertyRelative("_interactionType").intValue;
         property.FindPropertyRelative("_interactionType").intValue = EditorGUI.Popup(CalculateRect(150, 0), _oldStringIndex, temp.ToArray());
 
         NextLine(35);
@@ -289,7 +311,7 @@ public class GameEventPropteryDrawer : PropertyDrawer
 
     TriggerType GetPropertyAsTriggerType(SerializedProperty property)
     {
-        return (TriggerType)System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
+        return (TriggerType) System.Enum.Parse(typeof(TriggerType), options[property.enumValueIndex]);
     }
 
     Rect CalculateRect(float Pwidth, float Pheight, float PspaceWidth, float PspaceHeight, bool pIgnoreHeightChange = false)

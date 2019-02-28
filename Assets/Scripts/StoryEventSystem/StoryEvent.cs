@@ -8,7 +8,7 @@ using Unity.EditorCoroutines.Editor;
 #endif
 
 [DisallowMultipleComponent()]
-public class StoryEvent : MonoBehaviour
+public class StoryEvent : MonoBehaviour, IInteractable
 {
     [SerializeField]
     public List<StoryEventContainer> _storyEvents = new List<StoryEventContainer>();
@@ -23,7 +23,7 @@ public class StoryEvent : MonoBehaviour
 
     private void OnValidate()
     {
-        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        
         foreach (StoryEventContainer storyEventContainer in _storyEvents)
         {
             if (storyEventContainer._eventName == "")
@@ -43,23 +43,42 @@ public class StoryEvent : MonoBehaviour
             if (_collider == null)
             {
                 if (gameObject.activeSelf)
-                    StartCoroutine(FixColiderStatus(true));
+                {
+                    StartCoroutine(FixColiderStatus(true, false));
+                }
+
                 return;
             }
 
-            _collider.isTrigger = true;
+            foreach (StoryEventContainer storyEventContainer in _storyEvents)
+            {
+                if (storyEventContainer._storyEventTriggerType == TriggerType.Interact)
+                {
+                    if (!GetComponent<Rigidbody>())
+                    {
+                        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+                    }
+
+                }
+            }
+            gameObject.layer = 0;
+
         }
         else
         {
             if (_collider != null)
             {
                 if (gameObject.activeSelf)
+                {
                     StartCoroutine(FixColiderStatus(false));
+                }
             }
+
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
     //we are not allowed to destory the component in OnValidate this is the workaround (wait till the end of the frame
-    IEnumerator FixColiderStatus(bool addCollider)
+    IEnumerator FixColiderStatus(bool addCollider, bool trigger = true)
     {
         yield return new EditorWaitForSeconds(.1f);
 
@@ -70,7 +89,7 @@ public class StoryEvent : MonoBehaviour
                 gameObject.AddComponent<BoxCollider>();
                 _collider = GetComponent<BoxCollider>();
 
-                _collider.isTrigger = true;
+                _collider.isTrigger = trigger;
             }
         }
         else
@@ -104,11 +123,13 @@ public class StoryEvent : MonoBehaviour
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
             if (PstoryEvent._storyEventTriggerType == TriggerType.TriggerEnter)
+            {
                 if (PstoryEvent.CanExecuteStoryEvent(other.gameObject))
                 {
                     StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
                     return;
                 }
+            }
         }
     }
 
@@ -117,13 +138,41 @@ public class StoryEvent : MonoBehaviour
         foreach (StoryEventContainer PstoryEvent in _storyEvents)
         {
             if (PstoryEvent._storyEventTriggerType == TriggerType.TriggerExit)
+            {
                 if (PstoryEvent.CanExecuteStoryEvent(other.gameObject))
                 {
                     StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
                     return;
                 }
+            }
         }
     }
 
+    public void OnItemInteract(PlayerController owningPlayer)
+    {
+        Debug.Log("interact");
+
+        foreach (StoryEventContainer PstoryEvent in _storyEvents)
+        {
+            if (PstoryEvent._storyEventTriggerType == TriggerType.Interact)
+            {
+                if (PstoryEvent.CanExecuteStoryEvent())
+                {
+                    StoryEventManager.QueStoryEvents(PstoryEvent._storyEventsToPlay, PstoryEvent._eventName);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void OnItemRightMouseButton(PlayerController owningPlayer)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void UpdateObjectOffset(float newPosistion)
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
