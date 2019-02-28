@@ -11,6 +11,7 @@ public interface IInteractable
     void OnItemInteract(PlayerController owningPlayer);
     void OnItemRightMouseButton(PlayerController owningPlayer);
     void UpdateObjectOffset(float newPosistion);
+    GameObject GetGameObject();
 }
 
 //this object needs a rigidbody and capsule collider to make sure it has it We make unity require it
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour
         PlayerDataSO = (PlayerScriptableObject)Resources.Load("PlayerConfig");
 
         ChangeHeight(PlayerDataSO._playerData._normalHeight);
+        gameObject.layer = LayerMask.NameToLayer("Player");
     }
     #endregion
 
@@ -211,6 +213,11 @@ public class PlayerController : MonoBehaviour
 
         _rb.transform.rotation = Quaternion.Euler(0, _mouseInput.x, 0);
         _cam.transform.localRotation = Quaternion.Euler(_mouseInput.y, 0, 0);
+    }
+
+    public void ResetPlayer( Transform pResetTransform ) {
+        transform.position = pResetTransform.position;
+        transform.rotation = pResetTransform.rotation;
     }
 
 #region Movement
@@ -342,6 +349,7 @@ public class PlayerController : MonoBehaviour
     }
 
 #endregion
+
     void OnObjectInteraction()
     {
         RayCheck();
@@ -376,7 +384,7 @@ public class PlayerController : MonoBehaviour
         if (_playerData._debugRays)
         {
             //visible line in editor
-            Debug.DrawRay(_cam.gameObject.transform.position, _cam.gameObject.transform.forward * 2f, Color.green, 5);
+            Debug.DrawRay(_cam.gameObject.transform.position, _cam.gameObject.transform.forward * GameManager.objectInteractDistance[1], Color.green, 5);
         }
 
         //create a new raycasthit
@@ -384,7 +392,7 @@ public class PlayerController : MonoBehaviour
 
         //shoot a ray forward , and only check the layers specified in the editor
         //IF we hit something
-        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _playerData._objectInteractionDistance))
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward * GameManager.objectInteractDistance[ 1 ], out hit, _playerData._objectInteractionDistance))
         {
             //If the hit object has a rigidbody
             if (hit.rigidbody != null)
@@ -408,7 +416,7 @@ public class PlayerController : MonoBehaviour
             hitObjectInterface = null;
             if (holdingObject != null)
             {
-                holdingObject.UpdateObjectOffset(1500);
+                holdingObject.UpdateObjectOffset(2000);
             }
         }
     }

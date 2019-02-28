@@ -22,7 +22,7 @@ namespace Custom.GameManager
         PlayerController _player;
         SaveDataContainer _saveData = new SaveDataContainer();
 
-        float[] _objecInteractDistance = new float[] { 1, 2 };
+        float[] _objecInteractDistance = new float[] { 1, 2f };
 
         public static float[] objectInteractDistance => instance._objecInteractDistance;
 
