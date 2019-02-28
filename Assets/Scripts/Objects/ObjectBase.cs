@@ -3,26 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Custom.GameManager;
 
-[RequireComponent(typeof(BoxCollider), typeof(Rigidbody))]
+[RequireComponent(typeof(Collider), typeof(Rigidbody))]
 public class ObjectBase : MonoBehaviour, IInteractable
 {
     protected Rigidbody rb;
-    protected BoxCollider bc;
+    protected Collider _collider;
 
     protected Bounds objBounds;
 
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        bc = GetComponent<BoxCollider>();
-        objBounds = bc.bounds;
-        gameObject.layer = 8;
-    }
-
-    protected virtual void Update()
-    {
-       // if (transform.position.y < -1)
-         //   Destroy(gameObject);
+        _collider = GetComponent<Collider>();
+        objBounds = _collider.bounds;
     }
 
     public virtual void OnItemInteract(PlayerController owningPlayer)
@@ -36,7 +29,7 @@ public class ObjectBase : MonoBehaviour, IInteractable
             rb.interpolation = RigidbodyInterpolation.None;
 
             //disable box collider
-            bc.enabled = false;
+            _collider.enabled = false;
 
             //zet de parrant van dit object naar de player camera
             gameObject.transform.SetParent(owningPlayer.Cam.transform);
@@ -48,7 +41,7 @@ public class ObjectBase : MonoBehaviour, IInteractable
             gameObject.transform.SetParent(null);
             owningPlayer.holdingObject = null;
 
-            bc.enabled = true;
+            _collider.enabled = true;
             rb.isKinematic = false;
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
 

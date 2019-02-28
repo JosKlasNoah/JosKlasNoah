@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Custom.GameManager;
 
-public class OrbBehaviour : MonoBehaviour {
-    [SerializeField]
+public class OrbBehaviour : ObjectBase {
     private Transform _transformToFace;
 
     private GameObject _whirls;
@@ -12,6 +12,7 @@ public class OrbBehaviour : MonoBehaviour {
     private void Start()
     {
         _whirls = transform.GetChild(1).GetChild(2).gameObject;
+        _transformToFace = GameManager.CurrentPlayerController.transform;
         Debug.Assert( null != _whirls, "Collection object of Whirls special effect missing or moved!" );
         Debug.Assert( null != _transformToFace, "Equip a camera transform towards which the whirls should face!" );
     }

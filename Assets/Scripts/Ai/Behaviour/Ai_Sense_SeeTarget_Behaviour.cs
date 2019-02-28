@@ -45,7 +45,9 @@ public class Ai_Sense_SeeTarget_Behaviour : StateMachineBehaviour {
                 for ( int j = 0; j < (int)_rays.y; j++ )
                 {
                     //set rays
-                    _rayList[ i * ( int )_rays.y + j ] = new Ray( _aiTransform.position + _aiTransform.up * _aiController.EyeHeight, ( _aiTransform.forward + ( _aiTransform.up * _aiController.EyeSight.y * ( j - 1 ) ) + ( _aiTransform.right * _aiController.EyeSight.x * ( i - xAmountToSide ) ) ).normalized * _aiController.LookDepth );
+                    // normally you'd want this one, or something cloning xAmountToSide to yAmountToSide
+                    //_rayList[ i * ( int )_rays.y + j ] = new Ray( _aiTransform.position + _aiTransform.up * _aiController.EyeHeight, ( _aiTransform.forward + ( _aiTransform.up * _aiController.EyeSight.y * ( j - 1 ) ) + ( _aiTransform.right * _aiController.EyeSight.x * ( i - xAmountToSide ) ) ).normalized * _aiController.LookDepth );
+                    _rayList[ i * ( int )_rays.y + j ] = new Ray( _aiTransform.position + _aiTransform.up * _aiController.EyeHeight, ( _aiTransform.forward + ( _aiTransform.up * _aiController.EyeSight.y * j ) + ( _aiTransform.right * _aiController.EyeSight.x * ( i - xAmountToSide ) ) ).normalized * _aiController.LookDepth );
                 }
             }
         else {

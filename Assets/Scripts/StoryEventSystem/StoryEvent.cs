@@ -13,7 +13,7 @@ public class StoryEvent : MonoBehaviour
     [SerializeField]
     public List<StoryEventContainer> _storyEvents = new List<StoryEventContainer>();
 
-    BoxCollider _collider;
+    Collider _collider;
 
 
     #region Editor
@@ -39,7 +39,7 @@ public class StoryEvent : MonoBehaviour
 
         if (StoryEventManager.RequiresCollider(_storyEvents))
         {
-            _collider = GetComponent<BoxCollider>();
+            _collider = GetComponent<Collider>();
             if (_collider == null)
             {
                 if (gameObject.activeSelf)
