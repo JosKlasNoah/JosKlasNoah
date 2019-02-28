@@ -38,6 +38,9 @@ public class AiController : MonoBehaviour {
     [SerializeField]
     private float _attackRange = 19;
 
+    [SerializeField, Range(0.5f, 5)]
+    private float _cooldown = 1.5f;
+
     private PlayerController _target;
     private Vector3 _lastKnownTargetLocation;
     private Vector3 _startingLocation;
@@ -63,6 +66,8 @@ public class AiController : MonoBehaviour {
     public float LookRotationSpeed => _lookRotationSpeed;
 
     public float AttackRange => _attackRange;
+
+    public float Cooldown => _cooldown;
 
     public Vector3 StartingLocation => _startingLocation;
 

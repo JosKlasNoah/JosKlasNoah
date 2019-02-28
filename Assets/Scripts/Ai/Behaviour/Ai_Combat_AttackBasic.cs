@@ -5,29 +5,32 @@ using UnityEngine;
 
 public class Ai_Combat_AttackBasic : StateMachineBehaviour
 {
-    [SerializeField, Range( 0.5f, 4 )]
-    private float _cooldown = 1.5f;
+    private float _cooldown;
 
     private AiController _aiController;
     private Transform _aiTransform;
 
-    private int _damping = 2;
-    private float t = 0;
+    private float _damping = 3;
+    private float _t = 0;
+    private bool _inAttackRange = false;
 
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     public override void OnStateEnter( Animator animator, AnimatorStateInfo stateInfo, int layerIndex ) {
         _aiController = animator.gameObject.GetComponent<AiController>();
         _aiTransform = animator.transform;
+        _cooldown = _aiController.Cooldown;
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate( Animator animator, AnimatorStateInfo stateInfo, int layerIndex )
     {
-        Vector3 targetPosition = _aiController.Target.transform.position;
-        FaceTarget( targetPosition );
-        CheckRange( animator, targetPosition );
-        AttackUsing( animator.GetComponent<WizardAI>() );
+        if ( null != _aiController.Target ) {
+            Vector3 targetPosition = _aiController.Target.transform.position;
+            FaceTarget( targetPosition );
+            CheckRange( animator, targetPosition );
+            AttackUsing( animator.GetComponent<WizardAI>() );
+        }
     }
 
     private void FaceTarget( Vector3 pTargetPosition )
@@ -40,16 +43,18 @@ public class Ai_Combat_AttackBasic : StateMachineBehaviour
 
     private void CheckRange( Animator pAnimator, Vector3 targetPosition )
     {
-        if ( _aiController.Target != null && Vector3.Distance( _aiTransform.position, _aiController.Target.transform.position ) > _aiController.AttackRange )
+        if ( _aiController.Target != null )
         {
-            pAnimator.SetBool( "InAttackRange", false );
+            _inAttackRange = Vector3.Distance( _aiTransform.position, _aiController.Target.transform.position ) <= _aiController.AttackRange;
+            if ( !_inAttackRange ) Debug.Log( "out of range" );
+            pAnimator.SetBool( "InAttackRange", _inAttackRange );
         }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        _t = 0;
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -62,9 +67,10 @@ public class Ai_Combat_AttackBasic : StateMachineBehaviour
     //}
 
     private void AttackUsing( WizardAI wizardAI ) {
-        t -= Time.deltaTime;
-        if ( t <= 0 ) {
-            t = _cooldown;
+        _t -= Time.deltaTime;
+        Debug.Log( _t );
+        if ( _t <= 0 ) {
+            _t = _cooldown;
 
             wizardAI.InstantiateAttack(_aiController.Target.transform);
         }
