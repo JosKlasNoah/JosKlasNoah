@@ -73,7 +73,7 @@ public class StoryEvent : MonoBehaviour, IInteractable
             }
         }
 
-        if (!GetComponent<Rigidbody>())
+        if (!GetComponent<Rigidbody>() || GetComponent<Collider>())
         {
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
