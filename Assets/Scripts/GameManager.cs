@@ -35,6 +35,10 @@ namespace Custom.GameManager
                     new GameManager();
 
                 instance._player = value;
+#if UNITY_EDITOR
+
+                MouseVelocity = value.PlayerDataSO.mouseSpeed;
+#endif
             }
         }
 
@@ -59,6 +63,7 @@ namespace Custom.GameManager
                     new GameManager();
 
                 instance._saveData.mouseVelocity = value;
+                
             }
 
         }
@@ -98,6 +103,11 @@ namespace Custom.GameManager
         {
             instance._currentAudioSource.clip = PAudioClip;
             instance._currentAudioSource.Play();
+        }
+
+        public static void PauseAudio()
+        {
+            instance._currentAudioSource.Pause();
         }
     }
 }

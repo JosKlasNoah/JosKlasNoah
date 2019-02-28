@@ -40,9 +40,6 @@ public class PlayerData
     [SerializeField, Header("ObjectInteraction")]
     public float _objectInteractionDistance = 2.2f;
 
-    [SerializeField, Header("Raycasts")]
-    public LayerMask _rayCastLayers = new LayerMask();
-
     [SerializeField, Header("Debug")]
     public bool _debugRays = false;
 }

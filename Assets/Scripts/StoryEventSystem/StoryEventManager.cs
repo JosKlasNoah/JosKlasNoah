@@ -54,7 +54,7 @@ namespace Custom.Story
                 bool HasCompletedAll = true;
                 foreach (StoryEventNameContainer _storyName in _eventRequiredmentList)
                 {
-                    if (!_storyName._Completed && StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
+                    if (_storyName._Completed != StoryEventManager.HasStoryEventCompleted(_storyName._eventName))
                     {
                         HasCompletedAll = false;
                         break;
@@ -356,7 +356,7 @@ namespace Custom.Story
     public class StoryEventManager
     {
         static List<Type> _triggerTypesWithChildClasses;
-        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.TriggerEnter,TriggerType.TriggerExit };
+        static readonly List<TriggerType> _requiresColliders = new List<TriggerType>() { TriggerType.TriggerEnter, TriggerType.TriggerExit };
         List<string> _completedStoryEvents = new List<string>();
 
         EditorConfig _config;
@@ -403,6 +403,20 @@ namespace Custom.Story
             {
                 _completedStoryEvents.Add(name);
             }
+        }
+
+        public static void FinishQue()
+        {
+            if (instance._storyEventQue.Count <= 0)
+                return;
+
+            do
+            {
+                instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+            }
+            while (instance._storyEventQue.Count > 0);
+
+            GameManager.PauseAudio();
         }
 
         public static bool HasStoryEventCompleted(string name)
@@ -563,9 +577,12 @@ namespace Custom.Story
 
         public static void OnAudioFinished()
         {
-            instance._storyEventQue.Dequeue().OnStoryPlayFinished();
+            if (instance._storyEventQue.Count > 0)
+            {
+                instance._storyEventQue.Dequeue().OnStoryPlayFinished();
 
-            PlayNext();
+                PlayNext();
+            }
         }
 
         static void PlayNext()
