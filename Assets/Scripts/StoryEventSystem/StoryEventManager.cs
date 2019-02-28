@@ -140,7 +140,15 @@ namespace Custom.Story
 
         public void Invoke()
         {
-            GetMethod(_functionName).Invoke(null, ContainerToRuntimeData());
+
+            try
+            {
+                GetMethod(_functionName).Invoke(null, ContainerToRuntimeData());
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(_functionName + " is a unkown function");
+            }
         }
 
         object[] ContainerToRuntimeData()

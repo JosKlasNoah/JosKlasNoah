@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 
 public class RepeatableEvents
-{
+{ 
 
     public static void SetObjectActive(GameObject obj, bool Active)
     {
@@ -33,6 +33,20 @@ public class RepeatableEvents
         }
     }
 
+    public static void StairCaseFall(GameObject staircase)
+    {
+        Collider stairCollision = staircase.GetComponentInChildren<Collider>();
+        Rigidbody[] children = staircase.GetComponentsInChildren<Rigidbody>();
+        for (int i = 0; i < children.Length; i++)
+        {
+            children[i].mass = Random.Range(90, 140);
+            children[i].useGravity = true;
+            children[i].isKinematic = false;
+        }
+        stairCollision.enabled = false;
+        GameObject.Destroy(staircase, 5);
+    }
+
     public static void OpenScene(string name)
     {
         SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
@@ -42,6 +56,11 @@ public class RepeatableEvents
     {
         SceneManager.UnloadSceneAsync(name);
     }
+
+   public static void SetElevator(GameObject elevator)
+   {
+       elevator.GetComponent<Elevator>().up *= -1;
+   }
 
     public static void ExitGame()
     {
