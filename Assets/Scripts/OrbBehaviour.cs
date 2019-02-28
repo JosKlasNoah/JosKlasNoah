@@ -12,7 +12,8 @@ public class OrbBehaviour : MonoBehaviour {
     private void Start()
     {
         _whirls = transform.GetChild(1).GetChild(2).gameObject;
-        Debug.Assert(null != _whirls, "Collection object of Whirls special effect missing or moved!");
+        Debug.Assert( null != _whirls, "Collection object of Whirls special effect missing or moved!" );
+        Debug.Assert( null != _transformToFace, "Equip a camera transform towards which the whirls should face!" );
     }
 
     private void Update()
