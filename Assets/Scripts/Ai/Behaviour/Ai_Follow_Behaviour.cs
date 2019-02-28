@@ -53,6 +53,11 @@ public class Ai_Follow_Behaviour : StateMachineBehaviour
                 }
             }
         }
+    }
 
+    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        agent.destination = animator.transform.position;
     }
 }
