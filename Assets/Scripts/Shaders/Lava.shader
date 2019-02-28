@@ -7,8 +7,8 @@
 		_Color( "Color", Color ) = ( 1,1,1,1 )
 		_Ambient( "Ambient", Range( 0, 1 ) ) = 0.1
 		_TimeOffset( "TimeOffset", Range( 0, 1 ) ) = 0
-		_Amplitude( "Amplitude", Range( 0, 3 ) ) = 0.035
-		_Speed( "Speed", Range( 0, 10 ) ) = 2.8
+		_Amplitude( "Amplitude", Range( 0, 3 ) ) = 0.03
+		_Speed( "Speed", Range( 0, 10 ) ) = 2.5
 		_SwaySpeed( "SwaySpeed", Range( 0, 10 ) ) = 0.45
 		_SwayAmplitude( "SwayAmplitude", Range( 0, 5 ) ) = 0.015
 		_Zoom ( "Zoom", Range( -10, 0.99 ) ) = 0

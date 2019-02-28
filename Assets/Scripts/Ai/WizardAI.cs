@@ -10,9 +10,12 @@ public class WizardAI : MonoBehaviour
     [SerializeField]
     private Vector2 _offset;
 
-    public void InstantiateAttack()
+    public void InstantiateAttack( Transform pTarget )
     {
         Vector3 offset = transform.position + transform.forward * _offset.x + Vector3.up * _offset.y;
-        Instantiate( _attackPrefab, offset, Quaternion.identity );
+        GameObject attack = Instantiate( _attackPrefab, offset, Quaternion.identity );
+
+        // this is bad practise, but it's a fast fix for now
+        attack.GetComponent<MagicBolt>().TransformToFollow = pTarget;
     }
 }
