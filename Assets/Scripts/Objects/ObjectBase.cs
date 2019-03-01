@@ -31,7 +31,7 @@ public class ObjectBase : MonoBehaviour, IInteractable {
 
             //disable box collider
             //_collider.enabled = false;
-            gameObject.layer = 2;
+            gameObject.layer = LayerMask.NameToLayer("Objects");
 
             //zet de parrant van dit object naar de player camera
             gameObject.transform.SetParent(owningPlayer.Cam.transform);

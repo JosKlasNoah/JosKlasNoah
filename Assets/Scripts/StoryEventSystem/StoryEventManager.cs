@@ -75,7 +75,6 @@ namespace Custom.Story
 
             if (_currentInteractionCount >= _interactionCountBeforePlay + _maxInteractionCount)
             {
-                Debug.Log("A");
                 return false;
 
             }

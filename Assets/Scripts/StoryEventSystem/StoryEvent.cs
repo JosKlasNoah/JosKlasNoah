@@ -73,13 +73,13 @@ public class StoryEvent : MonoBehaviour, IInteractable
             }
         }
 
-        if (!GetComponent<Rigidbody>() || GetComponent<Collider>())
+        if (GetComponent<Rigidbody>() && GetComponent<Collider>())
         {
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+         //   gameObject.layer = 0;
         }
         else
         {
-            gameObject.layer = 0;
+         //   gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
     //we are not allowed to destroy the component in OnValidate. This is the workaround (wait till the end of the frame)

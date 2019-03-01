@@ -1,46 +1,57 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
-
-    public int up = -1;
-    private float t = 0;
     private Vector3 startPos;
-    [SerializeField] Vector3 endPos = new Vector3(0,20, 0);
+    [SerializeField] Vector3 endPos = new Vector3(0, 20, 0);
     [SerializeField] private float speed = 1;
+    [SerializeField] private float waitTime = 5f;
 
     /*private bool startTimer = false;
     private float timer = 5;*/
 
     private void Start()
     {
-        startPos = transform.localPosition;  
+        Debug.Log(transform.localPosition);
+        startPos = transform.localPosition;
     }
 
-    private void MoveElevator()
-    {
-        //transform.localPosition = new Vector3(transform.position.x, Mathf.Lerp(46.25f, 1, 0), transform.position.z);
-        transform.localPosition = Vector3.Lerp(startPos,startPos + endPos, t);
-    }
+    bool started = false;
 
-    private void Update()
+    public void StartPlatform()
     {
-      /*  if (t == 1)
+        if (!started)
         {
-            timer -= Time.deltaTime;
+            StartCoroutine(MovePlatform());
+            started = true;
         }
+    }
 
-        if(timer <= 0)
+
+    IEnumerator MovePlatform()
+    {
+        while (true)
         {
-            up *= -1;
-            timer = 5;
-        }*/
+            while (transform.localPosition.y < startPos.y + endPos.y)
+            {
+                transform.localPosition += Vector3.up * speed;
 
-        t += Time.deltaTime * up * speed;
-        Mathf.Clamp(t, 0, 1);
-       MoveElevator();
+                yield return new WaitForFixedUpdate();
+            }
+
+            yield return new WaitForSeconds(waitTime);
+
+            while (transform.localPosition.y > startPos.y)
+            {
+
+                transform.localPosition -= Vector3.up * speed;
+                yield return new WaitForFixedUpdate();
+            }
+
+            yield return new WaitForSeconds(waitTime);
+
+        }
     }
 
 }

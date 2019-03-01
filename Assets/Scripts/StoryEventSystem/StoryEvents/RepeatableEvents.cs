@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 
 public class RepeatableEvents
-{ 
+{
 
     public static void SetObjectActive(GameObject obj, bool Active)
     {
@@ -19,10 +19,10 @@ public class RepeatableEvents
         obj.transform.rotation = Quaternion.Euler(rotation);
     }
 
-    public static void OpenDoor(GameObject obj,bool open)
+    public static void OpenDoor(GameObject obj, bool open)
     {
         Door door = obj.GetComponent<Door>();
-        if(door != null)
+        if (door != null)
         {
             door.OpenDoor(open);
 
@@ -57,13 +57,13 @@ public class RepeatableEvents
         SceneManager.UnloadSceneAsync(name);
     }
 
-   public static void SetElevator(GameObject elevator)
-   {
-       elevator.GetComponent<Elevator>().up *= -1;
-   }
+    public static void SetElevator(GameObject elevator)
+    {
+        elevator.GetComponent<Elevator>().StartPlatform();
+    }
 
     public static void ExitGame()
     {
-        Application.Quit();
+        SceneManager.LoadScene(0);
     }
 }
