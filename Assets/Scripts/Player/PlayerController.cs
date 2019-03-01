@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField, HideInInspector]
     public Rigidbody _rb;
     [SerializeField, HideInInspector]
-    CapsuleCollider _capsuleCollider;
+    public CapsuleCollider _capsuleCollider;
 
     //MousePosistionData
     Vector2 _mouseInput;

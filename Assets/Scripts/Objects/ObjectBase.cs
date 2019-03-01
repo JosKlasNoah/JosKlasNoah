@@ -31,7 +31,7 @@ public class ObjectBase : MonoBehaviour, IInteractable {
 
             //disable box collider
             //_collider.enabled = false;
-            gameObject.layer = LayerMask.NameToLayer("Objects");
+            Physics.IgnoreCollision(_collider, owningPlayer._capsuleCollider,true);
 
             //zet de parrant van dit object naar de player camera
             gameObject.transform.SetParent(owningPlayer.Cam.transform);
@@ -43,7 +43,7 @@ public class ObjectBase : MonoBehaviour, IInteractable {
             gameObject.transform.SetParent(null);
             owningPlayer.holdingObject = null;
 
-            gameObject.layer = itemLayer;
+            Physics.IgnoreCollision(_collider, owningPlayer._capsuleCollider, false);
             //_collider.enabled = true;
             rb.isKinematic = false;
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
