@@ -30,8 +30,8 @@ public class WizardAI : MonoBehaviour {
     public void Disintegrate() {
 
         GameObject wizintegration = Instantiate( _disintegrationPrefab, transform, true );
-        wizintegration.transform.SetParent(null);
-        wizintegration.SetActive( true );
+        wizintegration.transform.SetParent( null );
+        wizintegration.transform.position = transform.position;
 
         CopyMeshPositionRotation( wizintegration );
         
