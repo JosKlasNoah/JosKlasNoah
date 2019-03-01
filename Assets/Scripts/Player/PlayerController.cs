@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
         PlayerDataSO = (PlayerScriptableObject) Resources.Load("PlayerConfig");
 
-        ChangeHeight(PlayerDataSO._playerData._normalHeight);
+        ChangeHeight(PlayerDataSO.playerData._normalHeight);
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
     #endregion
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         if (PlayerDataSO != null)
         {
-            _playerData = PlayerDataSO._playerData;
+            _playerData = PlayerDataSO.playerData;
         }
         else
         {

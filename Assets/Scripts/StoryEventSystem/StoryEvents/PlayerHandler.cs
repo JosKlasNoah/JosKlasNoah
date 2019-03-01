@@ -29,7 +29,7 @@ public class PlayerHandler
 
     public static void EnableCamera(bool pEnable)
     {
-        Player.Cam.cullingMask = pEnable ? 1 : 0;
+        Player.Cam.cullingMask = pEnable ? -1 : 0;
     }
 
     public static void CanPlayerMove(bool CanMove)
